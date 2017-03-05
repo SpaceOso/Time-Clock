@@ -2,17 +2,20 @@
 const startGroup = document.getElementById('start-time-group');
 const endGroup = document.getElementById('end-time-group');
 
+
 //inputs
+let taskNameInput = document.getElementById('task-input');
 let startTimeHourInput = document.getElementById('start-time-hour');
 let startTimeMinuteInput = document.getElementById('start-time-minutes');
 let endTimeHourInput = document.getElementById('end-time-hour');
 let endTimeMinuteInput = document.getElementById('end-time-minutes');
 
 //time values
+let taskName;
 let startTimeHour, startTimeMinutes;
 let endTimeHour, endTimeMinutes;
 
-let totalTimes = 0;
+let totalTasks = 0;
 let timeCollections = [];
 
 let errorText = {
@@ -48,36 +51,60 @@ function throwError(objectToError, addClass) {
     }
 }
 
+function createTimeDOM(taskCount) {
 
-function displayTimes(savedTimes) {
-    let startTimeSelector = document.querySelector('#start-time-0');
-    let endTimeSelector = document.querySelector('#end-time-0');
-    let totalTimeSelector = document.querySelector('#total-time-0');
+    let newTaskParent = document.createElement('div');
+
+    newTaskParent.id = `task-${taskCount}`;
+
+    newTaskParent.classList.add('row', `task-${taskCount}`);
+
+    document.querySelector('.task-holder').appendChild(newTaskParent);
+
+    newTaskParent.innerHTML =
+        `<div id="task-name-${taskCount}"></div>
+        <div id="start-time-${taskCount}"></div>
+        <div id="end-time-${taskCount}"></div>
+        <div id="total-time-${taskCount}"></div>`;
+}
+
+
+function displayTimes(savedTimes, taskCount) {
+
+    //create the elements first because we reference them via ID
+    createTimeDOM(taskCount);
+
+    let taskNameSelector = document.querySelector(`#task-name-${taskCount}`);
+    let startTimeSelector = document.querySelector(`#start-time-${taskCount}`);
+    let endTimeSelector = document.querySelector(`#end-time-${taskCount}`);
+    let totalTimeSelector = document.querySelector(`#total-time-${taskCount}`);
 
     let totalMinutes = (savedTimes.startTimes.minutes + savedTimes.endTimes.minutes);
     let remainingMinutes = 0;
 
-    if(totalMinutes > 60){
+    if (totalMinutes > 60) {
         remainingMinutes = totalMinutes - 60;
-    }else{
+    } else {
         remainingMinutes = totalMinutes;
     }
 
-
     let hourFromMinutes = Math.floor(totalMinutes / 60);
-    let totalHours = savedTimes.startTimes.hour + savedTimes.endTimes.hour + hourFromMinutes;
+    let totalHours = savedTimes.endTimes.hour - savedTimes.startTimes.hour;
     console.log(totalHours, remainingMinutes);
 
-    startTimeSelector.innerHTML = `Start Time: ${savedTimes.startTimes.hour}, ${savedTimes.startTimes.minutes}`;
-    endTimeSelector.innerHTML = `End Time: ${savedTimes.endTimes.hour}, ${savedTimes.endTimes.minutes}`;
-    totalTimeSelector.innerHTML = `Total Time: ${(savedTimes.startTimes.hour + savedTimes.endTimes.hour)}`;
+    taskNameSelector.innerHTML = `Task Name: ${savedTimes.taskName}`;
+    startTimeSelector.innerHTML = `Start Time: ${savedTimes.startTimes.hour} : ${savedTimes.startTimes.minutes}`;
+    endTimeSelector.innerHTML = `End Time: ${savedTimes.endTimes.hour} : ${savedTimes.endTimes.minutes}`;
+    totalTimeSelector.innerHTML = `Total Time: ${totalHours} : ${remainingMinutes}`;
+
 }
 
-
-function testFunc() {
+function grabValues() {
 
     let firstGroupChecked, secondGroupChecked;
 
+    //grab task name
+    taskName = taskNameInput.value;
     //convert inputs into numbers
     startTimeHour = +startTimeHourInput.value;
     startTimeMinutes = +startTimeMinuteInput.value;
@@ -87,6 +114,7 @@ function testFunc() {
 
 
     let currentTimes = {
+        taskName: taskName,
         startTimes: {
             hour: startTimeHour,
             minutes: startTimeMinutes,
@@ -120,9 +148,9 @@ function testFunc() {
     //when both groups are confirmed move on and save the time inputs
     if (firstGroupChecked && secondGroupChecked) {
         timeCollections.push(currentTimes);
-        console.log("the saved times are: ", currentTimes);
-        displayTimes(currentTimes);
-        totalTimes++;
+        displayTimes(currentTimes, totalTasks);
+        document.querySelector('#time-form').reset();
+        totalTasks++;
     }
 
 }

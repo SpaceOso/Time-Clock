@@ -32,12 +32,22 @@
 
 <div class="container">
 	<p id="error-message"></p>
-	<form action="" method="post" onsubmit="return false">
+	<form action="" method="post" onsubmit="return false" id="time-form">
+		<div class="row">
+			<label for="task-input">Enter name of task</label>
+			<input type="text"
+			       class="form-control"
+			       id="task-input"
+			       placeholder="Enter a name for your task"
+			       name="task-name"
+			       required
+			>
+		</div>
 		<div class="input-group" id="start-time-group">
 			<span class="input-group-addon" id="startTime-addon">Start Hour</span>
 			<input type="text"
 			       maxlength="2"
-			       class="form-control warning"
+			       class="form-control"
 			       id="start-time-hour"
 			       placeholder="Start Time Hour"
 			       required
@@ -73,14 +83,18 @@
 			       required
 			       placeholder="End Minutes"/>
 		</div>
-		<button type="submit" onclick="testFunc()">Enter Time</button>
+		<button  onclick="grabValues()">Enter Time</button>
 	</form>
 	
-	<div class="row">
-		<div id="start-time-0"></div>
-		<div id="end-time-0"></div>
-		<div id="total-time-0"></div>
+	<div class="task-holder">
+		<!--<div class="row" id="task-0">-->
+			<!--<div id="task-name-0"></div>-->
+			<!--<div id="start-time-0"></div>-->
+			<!--<div id="end-time-0"></div>-->
+			<!--<div id="total-time-0"></div>-->
+		<!--</div>-->
 	</div>
+	
 
 
 </div>
