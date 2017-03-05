@@ -1,0 +1,98 @@
+<!doctype html>
+<html class="no-js" lang="">
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	
+	<link rel="apple-touch-icon" href="apple-touch-icon.png">
+	<!-- Place favicon.ico in the root directory -->
+	
+	
+	<!-- Latest compiled and minified CSS -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	
+	<!-- Optional theme -->
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+	      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+	
+	
+	<link rel="stylesheet" href="css/normalize.css">
+	<link rel="stylesheet" href="css/main.css">
+	<script src="js/vendor/modernizr-2.8.3.min.js"></script>
+</head>
+<body>
+<!--[if lt IE 8]>
+<p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade
+	your browser</a> to improve your experience.</p>
+<![endif]-->
+
+<div class="container">
+	<p id="error-message"></p>
+	<form action="" method="post" onsubmit="return false">
+		<div class="input-group" id="start-time-group">
+			<span class="input-group-addon" id="startTime-addon">Start Hour</span>
+			<input type="text"
+			       maxlength="2"
+			       class="form-control warning"
+			       id="start-time-hour"
+			       placeholder="Start Time Hour"
+			       required
+			       name="start_time"/>
+			<span class="input-group-addon" id="startTime-addon-minutes">Start minutes</span>
+			<input type="number"
+			       maxlength="2"
+			       minlength="2"
+			       min="00"
+			       max="59"
+			       class="form-control"
+			       id="start-time-minutes"
+			       placeholder="Start Time Minutes"
+			       name="start-time-minutes"
+			       required/>
+		</div>
+		<div class="input-group" id="end-time-group">
+			<span class="input-group-addon" id="end-time-addon">End Time</span>
+			<input type="text"
+			       maxlength="2"
+			       id="end-time-hour"
+			       class="form-control"
+			       placeholder="End Time"
+			       required/>
+			<span class="input-group-addon" id="end-time-minutes-addon">End Time Minutes</span>
+			<input type="number"
+			       maxlength="2"
+			       minlength="2"
+			       min="00"
+			       max="59"
+			       id="end-time-minutes"
+			       class="form-control"
+			       required
+			       placeholder="End Minutes"/>
+		</div>
+		<button type="submit" onclick="testFunc()">Enter Time</button>
+	</form>
+	
+	<div class="row">
+		<div id="start-time-0"></div>
+		<div id="end-time-0"></div>
+		<div id="total-time-0"></div>
+	</div>
+
+
+</div>
+
+<script src="js/main.js"></script>
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!-- Include all compiled plugins (below), or include individual files as needed -->
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>
