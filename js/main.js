@@ -74,6 +74,20 @@ function displayTimes(savedTimes, taskCount) {
     //create the elements first because we reference them via ID
     createTimeDOM(taskCount);
 
+    //grab the AMPM inputs
+    let startAMPM = document.getElementsByName('start-ampm');
+    let endAMPM = document.getElementsByName('end-ampm');
+
+    console.log(startAMPM);
+
+    //TODO need to loop through the end ampm buttons
+    for(let i = 0; i < startAMPM.length; i++){
+        if(startAMPM[i].checked == true){
+            console.log(startAMPM[i].value);
+        }
+    }
+
+
     let taskNameSelector = document.querySelector(`#task-name-${taskCount}`);
     let startTimeSelector = document.querySelector(`#start-time-${taskCount}`);
     let endTimeSelector = document.querySelector(`#end-time-${taskCount}`);
