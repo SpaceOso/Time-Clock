@@ -68,24 +68,34 @@ function createTimeDOM(taskCount) {
         <div id="total-time-${taskCount}"></div>`;
 }
 
+function setAMPM() {
+    //grab the AMPM inputs
+    let startAMPMInputs = document.getElementsByName('start-ampm');
+    let endAMPMInputs = document.getElementsByName('end-ampm');
+
+    let settingsAMPM = {};
+
+    for(let i = 0; i < startAMPMInputs.length; i++){
+        if(startAMPMInputs[i].checked == true){
+            settingsAMPM.startTime = startAMPMInputs[i].value;
+        }
+    }
+
+    for(let i = 0; i < endAMPMInputs.length; i++){
+        if(endAMPMInputs[i].checked == true){
+            settingsAMPM.endTime = endAMPMInputs[i].value;
+        }
+    }
+
+    return settingsAMPM;
+}
 
 function displayTimes(savedTimes, taskCount) {
 
     //create the elements first because we reference them via ID
     createTimeDOM(taskCount);
 
-    //grab the AMPM inputs
-    let startAMPM = document.getElementsByName('start-ampm');
-    let endAMPM = document.getElementsByName('end-ampm');
-
-    console.log(startAMPM);
-
-    //TODO need to loop through the end ampm buttons
-    for(let i = 0; i < startAMPM.length; i++){
-        if(startAMPM[i].checked == true){
-            console.log(startAMPM[i].value);
-        }
-    }
+    let settingsAMPM = setAMPM();
 
 
     let taskNameSelector = document.querySelector(`#task-name-${taskCount}`);
