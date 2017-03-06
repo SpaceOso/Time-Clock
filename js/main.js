@@ -95,8 +95,6 @@ function displayTimes(savedTimes, taskCount) {
     //create the elements first because we reference them via ID
     createTimeDOM(taskCount);
 
-    let settingsAMPM = setAMPM();
-
 
     let taskNameSelector = document.querySelector(`#task-name-${taskCount}`);
     let startTimeSelector = document.querySelector(`#start-time-${taskCount}`);
@@ -113,6 +111,7 @@ function displayTimes(savedTimes, taskCount) {
     }
 
     let hourFromMinutes = Math.floor(totalMinutes / 60);
+    //TODO this is wrong, if the start time was 8:30 and end time was 9 it substracts 8 from 9 giving us an hour spent
     let totalHours = savedTimes.endTimes.hour - savedTimes.startTimes.hour;
     console.log(totalHours, remainingMinutes);
 
@@ -123,9 +122,53 @@ function displayTimes(savedTimes, taskCount) {
 
 }
 
+function confirmInputs(timeObject) {
+    //can't check for start time hour to be bigger than end time hour
+    //there could be the case when the start and end time both happened during the same hour
+
+
+    //TODO let minutes = minutes % 60;
+    //the above spits out the remaining minutes if you were to enter 90 minutes it will give you 30 back
+    if(timeObject.startTimes.pm){
+       timeObject.startTimes.hour =  timeObject.startTimes.hour + 12;
+    }
+
+    if(timeObject.endTimes.pm){
+        timeObject.endTimes.hour = timeObject.endTimes.hour + 12;
+    }
+
+    //check if they are both within the same hour
+    if(timeObject.startTimes.hour == timeObject.endTimes.hour){
+        console.log("they both started at the same time");
+        //if they both started at the same hour we then need to check minutes
+        if(timeObject.startTimes.minutes < timeObject.endTimes.minutes){
+            console.log("we found out the difference based on the minutes");
+            return true;
+        }
+    }
+
+    console.log("hours were not the same so we are just returning the input hours");
+    return timeObject.startTimes.hour < timeObject.startTimes.hour;
+}
+
+
 function grabValues() {
 
+
+    let ampmSettings = setAMPM();
+    let startPM, endPM;
+
     let firstGroupChecked, secondGroupChecked;
+
+
+    if(ampmSettings.startTime == 'start-pm'){
+        startPM = true;
+    }
+
+    if(ampmSettings.endTime == 'end-pm'){
+        endPM = true;
+    }
+
 
     //grab task name
     taskName = taskNameInput.value;
@@ -140,14 +183,19 @@ function grabValues() {
     let currentTimes = {
         taskName: taskName,
         startTimes: {
+            pm: startPM,
             hour: startTimeHour,
             minutes: startTimeMinutes,
         },
         endTimes: {
+            pm: endPM,
             hour: endTimeHour,
             minutes: endTimeMinutes
         }
     };
+
+    //need a function to check that the second time is not smaller than the first time
+    confirmInputs(currentTimes);
 
 
     //check the first group for validation
