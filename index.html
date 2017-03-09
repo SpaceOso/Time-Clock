@@ -9,7 +9,7 @@
 	
 	<link rel="apple-touch-icon" href="apple-touch-icon.png">
 	<!-- Place favicon.ico in the root directory -->
-	
+	<link rel="stylesheet" href="css/normalize.css">
 	
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -19,9 +19,10 @@
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
 	      integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
 	
+	<!-- Latest compiled and minified JavaScript -->
 	
-	<link rel="stylesheet" href="css/normalize.css">
 	<link rel="stylesheet" href="css/main.css">
+	
 	<script src="js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 <body>
@@ -30,7 +31,16 @@
 	your browser</a> to improve your experience.</p>
 <![endif]-->
 
+
 <div class="container">
+	<div class="row">
+		<div class="title">
+			<h1>Time-Clock</h1>
+			<p>A simple app to keep track of your daily hours</p>
+		</div>
+	
+	</div>
+	
 	<p id="error-message"></p>
 	<form action="" method="post" onsubmit="return false" id="time-form">
 		<div class="row">
@@ -43,62 +53,96 @@
 			       required
 			>
 		</div>
-		<div class="input-group" id="start-time-group">
-			<input type="radio" id="start-am" name="start-ampm" value="start-am" required> AM
-			<input type="radio" id="start-pm" name="start-ampm" value="start-pm" required> PM
-			<span class="input-group-addon" id="startTime-addon">Start Hour</span>
-			<input type="text"
-			       maxlength="2"
-			       class="form-control"
-			       id="start-time-hour"
-			       placeholder="Start Time Hour"
-			       required
-			       name="start_time"/>
-			<span class="input-group-addon" id="startTime-addon-minutes">Start minutes</span>
-			<input type="number"
-			       maxlength="2"
-			       minlength="2"
-			       min="00"
-			       max="59"
-			       class="form-control"
-			       id="start-time-minutes"
-			       placeholder="Start Time Minutes"
-			       name="start-time-minutes"
-			       required/>
+		
+		<div class="row">
+			<div class="col-lg-6">
+				<h3>Start Time</h3>
+				<div class="panel panel-default">
+					<div class="panel-body day-time" id="start-body">
+						<div class="input-group" id="start-time-group">
+							<!--<input type="radio" id="start-am" name="start-ampm" value="start-am" required> AM-->
+							<!--<input type="radio" id="start-pm" name="start-ampm" value="start-pm" required> PM-->
+							
+							<span class="input-group-btn" id="startTime-addon">
+								<button class="btn btn-default" type="button" id='start-time-btn' onclick="SetTime('start')" value="am">Set PM</button>
+							</span>
+							<input type="text"
+							       maxlength="2"
+							       class="form-control"
+							       id="start-time-hour"
+							       placeholder="Start Time Hour"
+							       required
+							       name="start_time"/>
+							<span class="input-group-addon" id="startTime-addon-minutes">
+								Minutes
+							</span>
+							<input type="number"
+							       maxlength="2"
+							       minlength="2"
+							       min="00"
+							       max="59"
+							       class="form-control"
+							       id="start-time-minutes"
+							       placeholder="Minutes"
+							       name="start-time-minutes"
+							       required/>
+						</div>
+					</div>
+				</div>
+			
+			</div>
+			
+			<div class="col-lg-6">
+				<h3>
+					End Time
+				</h3>
+				<div class="panel panel-default">
+					<div class="panel-body day-time" id="end-body">
+						<div class="input-group" id="end-time-group">
+							<!--<input type="radio" id="end-am" name="end-ampm" value="end-am" required> AM-->
+							<!--<input type="radio" id="end-pm" name="end-ampm" value="end-pm" required> PM-->
+							<span class="input-group-btn" id="endTime-addon">
+								<button class="btn btn-default" type="button" id='end-time-btn' onclick="SetTime('end')" value="am">Set PM</button>
+							</span>
+							<input type="text"
+							       maxlength="2"
+							       id="end-time-hour"
+							       class="form-control"
+							       placeholder="End Time"
+							       required/>
+							<span class="input-group-addon" id="end-time-minutes-addon">End Time Minutes</span>
+							<input type="number"
+							       maxlength="2"
+							       minlength="2"
+							       min="00"
+							       max="59"
+							       id="end-time-minutes"
+							       class="form-control"
+							       required
+							       placeholder="End Minutes"/>
+						</div>
+					</div>
+				</div>
+			
+			</div>
 		</div>
-		<div class="input-group" id="end-time-group">
-			<input type="radio" id="end-am" name="end-ampm" value="end-am" required> AM
-			<input type="radio" id="end-pm" name="end-ampm" value="end-pm" required> PM
-			<span class="input-group-addon" id="end-time-addon">End Time</span>
-			<input type="text"
-			       maxlength="2"
-			       id="end-time-hour"
-			       class="form-control"
-			       placeholder="End Time"
-			       required/>
-			<span class="input-group-addon" id="end-time-minutes-addon">End Time Minutes</span>
-			<input type="number"
-			       maxlength="2"
-			       minlength="2"
-			       min="00"
-			       max="59"
-			       id="end-time-minutes"
-			       class="form-control"
-			       required
-			       placeholder="End Minutes"/>
+		
+		<div class="row">
+		
 		</div>
-		<button  onclick="grabValues()">Enter Time</button>
+		
+		
+		<button onclick="grabValues()">Enter Time</button>
 	</form>
 	
 	<div class="task-holder">
 		<!--<div class="row" id="task-0">-->
-			<!--<div id="task-name-0"></div>-->
-			<!--<div id="start-time-0"></div>-->
-			<!--<div id="end-time-0"></div>-->
-			<!--<div id="total-time-0"></div>-->
+		<!--<div id="task-name-0"></div>-->
+		<!--<div id="start-time-0"></div>-->
+		<!--<div id="end-time-0"></div>-->
+		<!--<div id="total-time-0"></div>-->
 		<!--</div>-->
 	</div>
-	
 
 
 </div>
