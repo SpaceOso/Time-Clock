@@ -25,7 +25,22 @@ let startHourInMinutes, endHourInMinutes;
 //startHourInMinutes + minutes;
 let totalStartMinutes, totalEndMinutes;
 
+let totalTimes;
+
 let totalTasks = 0;
+
+//holds all the approved times
+/*taskName: taskNameInput.value,
+    startTimes: {
+    pm: startPM,
+        hour: +startTimeHourInput.value,
+        minutes: +startTimeMinuteInput.value,
+},
+endTimes: {
+    pm: endPM,
+        hour: +endTimeHourInput.value,
+        minutes: +endTimeMinuteInput.value
+}*/
 let timeCollections = [];
 
 let errorText = {
@@ -67,6 +82,41 @@ function throwError(objectToError, addClass) {
 	}
 }
 
+
+function getTimes(minutes) {
+    console.log('inside getTimes');
+    console.log('the minutes we are going to do math with: ', minutes);
+}
+
+function getTotalTimes() {
+    console.log("inside getTotalTimes()");
+    console.log(timeCollections);
+
+    let totalTimes = 0;
+    let totalSavedHours = 0;
+    let totalSavedMinutes = 0;
+
+
+    for(let i = 0; i < timeCollections.length; i++){
+        totalSavedHours += timeCollections[i].totalTimeSpentHours;
+        totalSavedMinutes += timeCollections[i].totalTimeSpentMinutes;
+    }
+
+    //here we need to take the totalSavedMinutes and convert them to hours.minutes
+    //once we get that value we can just add it to the totalSavedHours or what you can do..
+    //is send the totalSavedMinutes to the getTime() function that will then return hour.minutes format
+    //yes that seems like the best way to go about this
+
+    //what is going to be the best way to get the total times?
+    //we have the individudal hours
+    //we have the individudal minutes
+    //we can convert all the hours into minutes, then add all the minutes together to get a new total worth of minutes
+    //we can then probably create a function that returns an object with an hour and minutes
+    //the function can be called something like getTime() and it takes minutes
+
+
+}
+
 function createTimeDOM(taskCount) {
 
 	let newTaskParent = document.createElement('div');
@@ -79,8 +129,8 @@ function createTimeDOM(taskCount) {
 
 	newTaskParent.innerHTML =
 		`<div id="task-name-${taskCount}">
-            <h1 class="task-title" id="task-${taskCount}-title"></h1>
-            <h3 class="task-total" id="total-time-${taskCount}"></h3>
+            <p class="task-title" id="task-${taskCount}-title"></p>
+            <p class="task-total" id="total-time-${taskCount}"></p>
         </div>
         <div id="times-${taskCount}">
             <p class="times"></p>
@@ -126,6 +176,12 @@ function displayTimes(savedTimes, taskCount) {
 	totalTimeSelector.innerHTML = `Time: ${totalHours}.${totalMinutes}`;
 	
 	timesParagraph.innerHTML = `${startTime} - ${endTime}`;
+
+	timeCollections[taskCount].totalTimeSpentHours = totalHours;
+	timeCollections[taskCount].totalTimeSpentMinutes = totalMinutes;
+
+
+	getTotalTimes();
 
 }
 
@@ -218,6 +274,8 @@ function grabValues() {
 
 	//when both groups are confirmed move on and save the time inputs
 	if (firstGroupChecked && secondGroupChecked) {
+	    currentTimes.thisTaskID = totalTasks;
+	    console.log(currentTimes);
 		timeCollections.push(currentTimes);
 		displayTimes(currentTimes, totalTasks);
 		document.querySelector('#time-form').reset();
