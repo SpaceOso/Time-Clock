@@ -17,30 +17,13 @@ const startTimeFrameBtn = document.getElementById('start-time-btn');
 const endTimeFrameBtn = document.getElementById('end-time-btn');
 
 
-//time values
-let taskName;
 
-//hours * 60
-let startHourInMinutes, endHourInMinutes;
 //startHourInMinutes + minutes;
 let totalStartMinutes, totalEndMinutes;
-
-let totalTimes;
 
 let totalTasks = 0;
 
 //holds all the approved times
-/*taskName: taskNameInput.value,
-    startTimes: {
-    pm: startPM,
-        hour: +startTimeHourInput.value,
-        minutes: +startTimeMinuteInput.value,
-},
-endTimes: {
-    pm: endPM,
-        hour: +endTimeHourInput.value,
-        minutes: +endTimeMinuteInput.value
-}*/
 let timeCollections = [];
 
 let errorText = {
@@ -49,6 +32,11 @@ let errorText = {
 	higherStartTime: "Start time should be less than end time",
 	sameTimes: "Times can't be the same"
 };
+
+//TODO Need to check that the inputs are within the time frames
+//for example they shouldn't be able to enter anything above 59 for mins
+//they also shouldn't be able to insert something higher than 13 for the hour unless we set it to be military time
+
 
 function checkForNumber(number) {
 	return !isNaN(number);
@@ -82,17 +70,18 @@ function throwError(objectToError, addClass) {
 	}
 }
 
+function getHours(minutes){
+    return Math.trunc(minutes / 60);
+}
 
-function getTimes(minutes) {
-    console.log('inside getTimes');
-    console.log('the minutes we are going to do math with: ', minutes);
+function getRemainingMinutes(minutes){
+    return minutes % 60;
 }
 
 function getTotalTimes() {
     console.log("inside getTotalTimes()");
     console.log(timeCollections);
-
-    let totalTimes = 0;
+	
     let totalSavedHours = 0;
     let totalSavedMinutes = 0;
 
@@ -102,22 +91,14 @@ function getTotalTimes() {
         totalSavedMinutes += timeCollections[i].totalTimeSpentMinutes;
     }
 
-    //here we need to take the totalSavedMinutes and convert them to hours.minutes
-    //once we get that value we can just add it to the totalSavedHours or what you can do..
-    //is send the totalSavedMinutes to the getTime() function that will then return hour.minutes format
-    //yes that seems like the best way to go about this
-
-    //what is going to be the best way to get the total times?
-    //we have the individudal hours
-    //we have the individudal minutes
-    //we can convert all the hours into minutes, then add all the minutes together to get a new total worth of minutes
-    //we can then probably create a function that returns an object with an hour and minutes
-    //the function can be called something like getTime() and it takes minutes
-
-
+	totalSavedMinutes += totalSavedHours * 60;
+    
+    return {totalHours: getHours(totalSavedMinutes), totalMinutes: getRemainingMinutes(totalSavedMinutes)};
+	
 }
 
-function createTimeDOM(taskCount) {
+//stamps out the template for the new task panel
+function createTaskPanel(taskCount) {
 
 	let newTaskParent = document.createElement('div');
 
@@ -149,41 +130,7 @@ function setAMPM() {
 	return settingsAMPM;
 }
 
-function displayTimes(savedTimes, taskCount) {
 
-	//create the elements first because we reference them via ID
-	createTimeDOM(taskCount);
-
-
-	let taskNameSelector = document.querySelector(`#task-${taskCount}-title`);
-	let totalTimeSelector = document.querySelector(`#total-time-${taskCount}`);
-	
-	let timesParagraph = document.querySelector(`#times-${taskCount} p`);
-
-	let totalHours = Math.trunc((totalEndMinutes - totalStartMinutes) / 60);
-	let totalMinutes = (totalEndMinutes - totalStartMinutes) % 60;
-
-	console.log('totalHours: ', totalHours);
-
-	if (totalHours < 1) {
-		totalHours = 0;
-	}
-
-	let startTime = `${savedTimes.startTimes.hour}:${savedTimes.startTimes.minutes}`;
-	let endTime = `${savedTimes.endTimes.hour}:${savedTimes.endTimes.minutes}`;
-	
-	taskNameSelector.innerHTML = `${savedTimes.taskName}`;
-	totalTimeSelector.innerHTML = `Time: ${totalHours}.${totalMinutes}`;
-	
-	timesParagraph.innerHTML = `${startTime} - ${endTime}`;
-
-	timeCollections[taskCount].totalTimeSpentHours = totalHours;
-	timeCollections[taskCount].totalTimeSpentMinutes = totalMinutes;
-
-
-	getTotalTimes();
-
-}
 
 function confirmInputs(timeObject) {
 
@@ -202,8 +149,8 @@ function confirmInputs(timeObject) {
 	}
 
 	//convert hours to minutes
-	startHourInMinutes = timeObject.startTimes.hour * 60;
-	endHourInMinutes = timeObject.endTimes.hour * 60;
+	let startHourInMinutes = timeObject.startTimes.hour * 60;
+	let endHourInMinutes = timeObject.endTimes.hour * 60;
 
 	totalStartMinutes = startHourInMinutes + timeObject.startTimes.minutes;
 	totalEndMinutes = endHourInMinutes + timeObject.endTimes.minutes;
@@ -230,8 +177,7 @@ function grabValues() {
 	let {startPM, endPM} = setAMPM();
 
 	let firstGroupChecked, secondGroupChecked;
-
-
+    
 	let currentTimes = {
 		taskName: taskNameInput.value,
 		startTimes: {
@@ -274,14 +220,60 @@ function grabValues() {
 
 	//when both groups are confirmed move on and save the time inputs
 	if (firstGroupChecked && secondGroupChecked) {
+	    //give this current time obj an id
 	    currentTimes.thisTaskID = totalTasks;
-	    console.log(currentTimes);
-		timeCollections.push(currentTimes);
+		
+	    timeCollections.push(currentTimes);
+		
 		displayTimes(currentTimes, totalTasks);
+		
 		document.querySelector('#time-form').reset();
+		
 		totalTasks++;
 	}
 
+}
+
+function displayTimes(savedTimes, taskCount) {
+    
+    //create the elements first because we reference them via ID
+    createTaskPanel(taskCount);
+    
+    
+    let taskNameSelector = document.querySelector(`#task-${taskCount}-title`);
+    let totalTimeSelector = document.querySelector(`#total-time-${taskCount}`);
+    
+    let timesParagraph = document.querySelector(`#times-${taskCount} p`);
+    
+    let totalTimeParagraph = document.querySelector('#total-time');
+    
+    
+    let totalHours = getHours(totalEndMinutes - totalStartMinutes);
+    
+    let totalMinutes = getRemainingMinutes(totalEndMinutes - totalStartMinutes);
+    
+    console.log('totalHours: ', totalHours);
+    
+    if (totalHours < 1) {
+        totalHours = 0;
+    }
+    
+    let startTime = `${savedTimes.startTimes.hour}:${savedTimes.startTimes.minutes}`;
+    let endTime = `${savedTimes.endTimes.hour}:${savedTimes.endTimes.minutes}`;
+    
+    taskNameSelector.innerHTML = `${savedTimes.taskName}`;
+    totalTimeSelector.innerHTML = `Time: ${totalHours}.${totalMinutes}`;
+    
+    timesParagraph.innerHTML = `${startTime} - ${endTime}`;
+    
+    timeCollections[taskCount].totalTimeSpentHours = totalHours;
+    timeCollections[taskCount].totalTimeSpentMinutes = totalMinutes;
+    
+    
+    let {totalHours: taskHours, totalMinutes: taskMinutes} = getTotalTimes();
+    
+    totalTimeParagraph.innerHTML = `Total Time: ${taskHours}.${taskMinutes}`;
+    
 }
 
 function SetTime(timeFrame) {
