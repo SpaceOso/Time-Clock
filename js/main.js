@@ -78,6 +78,10 @@ function getRemainingMinutes(minutes){
     return minutes % 60;
 }
 
+function getMinutesFromHours(hours){
+    return hours * 60;
+}
+
 function getTotalTimes() {
     console.log("inside getTotalTimes()");
     console.log(timeCollections);
@@ -97,6 +101,17 @@ function getTotalTimes() {
 	
 }
 
+function clickedName(event){
+    console.log("Something has been clicked in the DOM");
+    console.log(event.target.id);
+
+    event.target.classList.add('hide');
+
+    console.log(event.target.id + '-modify');
+    document.getElementById(event.target.id + '-modify').classList.remove('hide');
+    // event.target.nodeType =
+}
+
 //stamps out the template for the new task panel
 function createTaskPanel(taskCount) {
 
@@ -111,49 +126,58 @@ function createTaskPanel(taskCount) {
 	newTaskParent.innerHTML =
 		`<div id="task-name-${taskCount}">
             <p class="task-title" id="task-${taskCount}-title"></p>
+            <input class="task-input-modify hide" id="task-${taskCount}-title-modify" type="text">
             <p class="task-total" id="total-time-${taskCount}"></p>
         </div>
         <div id="times-${taskCount}">
             <p class="times"></p>
         </div>`;
+
+	let testEvent = document.getElementById(`task-name-${taskCount}`);
+
+	testEvent.addEventListener('click', clickedName)
 }
 
-function setAMPM() {
+function getAmOrPM() {
 	//grab the AMPM inputs
 
-	let settingsAMPM = {};
+	// let settingsAMPM = {};
 
-	settingsAMPM.startPM = startTimeFrameBtn.value == 'pm';
-	settingsAMPM.endPM = endTimeFrameBtn.value == 'pm';
+	// settingsAMPM.startPM = startTimeFrameBtn.value == 'pm';
+	// settingsAMPM.endPM = endTimeFrameBtn.value == 'pm';
 
 
-	return settingsAMPM;
+	return {
+	    startPm: startTimeFrameBtn.value == 'pm',
+        endPM: endTimeFrameBtn.value == 'pm'
+    };
+
+	// return settingsAMPM;
 }
 
 
+function confirmInputs(currentTaskObj) {
 
-function confirmInputs(timeObject) {
 
-
-	if (timeObject.startTimes.pm) {
-		if (timeObject.startTimes.hour < 12) {
-			timeObject.startTimes.hour = timeObject.startTimes.hour + 12;
+	if (currentTaskObj.startTimes.pm) {
+		if (currentTaskObj.startTimes.hour < 12) {
+			currentTaskObj.startTimes.hour = currentTaskObj.startTimes.hour + 12;
 		}
 
 	}
 
-	if (timeObject.endTimes.pm) {
-		if (timeObject.endTimes.hour < 12) {
-			timeObject.endTimes.hour = timeObject.endTimes.hour + 12;
+	if (currentTaskObj.endTimes.pm) {
+		if (currentTaskObj.endTimes.hour < 12) {
+			currentTaskObj.endTimes.hour = currentTaskObj.endTimes.hour + 12;
 		}
 	}
 
 	//convert hours to minutes
-	let startHourInMinutes = timeObject.startTimes.hour * 60;
-	let endHourInMinutes = timeObject.endTimes.hour * 60;
+	let startHourInMinutes = getMinutesFromHours(currentTaskObj.startTimes.hour);
+	let endHourInMinutes = getMinutesFromHours(currentTaskObj.endTimes.hour);
 
-	totalStartMinutes = startHourInMinutes + timeObject.startTimes.minutes;
-	totalEndMinutes = endHourInMinutes + timeObject.endTimes.minutes;
+	totalStartMinutes = startHourInMinutes + currentTaskObj.startTimes.minutes;
+	totalEndMinutes = endHourInMinutes + currentTaskObj.endTimes.minutes;
 
 
 	if (totalStartMinutes == totalEndMinutes) {
@@ -161,71 +185,81 @@ function confirmInputs(timeObject) {
 		return false;
 	}
 
+	if(totalStartMinutes >= totalEndMinutes){
+	    displayErrorMessage(errorText.higherStartTime);
+        return false;
+    }
+
 	if (totalStartMinutes < totalEndMinutes) {
 		return true;
 	}
 
 }
 
+function createTask() {
+
+    //returns an object with startTime and endTime AMPM values
+    let {startPM, endPM} = getAmOrPM();
+
+    return {
+        taskName: taskNameInput.value,
+        startTimes: {
+            pm: startPM,
+            hour: +startTimeHourInput.value,
+            minutes: +startTimeMinuteInput.value,
+        },
+        endTimes: {
+            pm: endPM,
+            hour: +endTimeHourInput.value,
+            minutes: +endTimeMinuteInput.value
+        }
+    };
+}
 
 function grabValues() {
 
 
 	displayErrorMessage('');
 
-	//returns an object with startTime and endTime AMPM values
-	let {startPM, endPM} = setAMPM();
-
-	let firstGroupChecked, secondGroupChecked;
+    //will evaluate to true if each group is confirmed
+	let startGroupChecked, endGroupChecked;
     
-	let currentTimes = {
-		taskName: taskNameInput.value,
-		startTimes: {
-			pm: startPM,
-			hour: +startTimeHourInput.value,
-			minutes: +startTimeMinuteInput.value,
-		},
-		endTimes: {
-			pm: endPM,
-			hour: +endTimeHourInput.value,
-			minutes: +endTimeMinuteInput.value
-		}
-	};
+	let currentTask = createTask();
 
 	//need a function to check that the second time is not smaller than the first time
-	if (!confirmInputs(currentTimes)) {
+	if (!confirmInputs(currentTask)) {
 		displayErrorMessage(errorText.higherStartTime);
 		return false;
 	}
 
 
 	//check the first group for validation
-	if (checkGroups(currentTimes.startTimes)) {
+	if (checkGroups(currentTask.startTimes)) {
 		throwError(startGroup, false);
-		firstGroupChecked = true;
+		startGroupChecked = true;
 	} else {
 		throwError(startGroup, true);
-		firstGroupChecked = false;
+		startGroupChecked = false;
 	}
 
 	//check the second group for validation
-	if (checkGroups(currentTimes.endTimes)) {
+	if (checkGroups(currentTask.endTimes)) {
 		throwError(endGroup, false);
-		secondGroupChecked = true;
+		endGroupChecked = true;
 	} else {
 		throwError(endGroup, true);
-		secondGroupChecked = false;
+		endGroupChecked = false;
 	}
 
 
 	//when both groups are confirmed move on and save the time inputs
-	if (firstGroupChecked && secondGroupChecked) {
+	if (startGroupChecked && endGroupChecked) {
 	    //give this current time obj an id
-	    currentTimes.thisTaskID = totalTasks;
+	    currentTask.thisTaskID = totalTasks;
 		
-	    timeCollections.push(currentTimes);
+	    timeCollections.push(currentTask);
 		
-		displayTimes(currentTimes, totalTasks);
+		displayTimes(currentTask, totalTasks);
 		
 		document.querySelector('#time-form').reset();
 		

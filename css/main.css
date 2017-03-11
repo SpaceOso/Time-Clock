@@ -353,3 +353,15 @@ textarea {
 .task-total{
     margin-top: 0;
 }
+
+.hide{
+    /*display: none;*/
+}
+
+.show-inline{
+    display: inline;
+}
+
+.show-block{
+    display: block;
+}
