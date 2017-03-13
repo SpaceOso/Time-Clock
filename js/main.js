@@ -16,10 +16,11 @@ const errorParent = document.getElementById('error-message');
 const startTimeFrameBtn = document.getElementById('start-time-btn');
 const endTimeFrameBtn = document.getElementById('end-time-btn');
 
-
+let isEditing = false;
+let taskNameID = '';
 
 //startHourInMinutes + minutes;
-let totalStartMinutes, totalEndMinutes;
+let TOTAL_START_MINUTES, TOTAL_END_MINUTES;
 
 let totalTasks = 0;
 
@@ -101,14 +102,48 @@ function getTotalTimes() {
 	
 }
 
+function blurTaskName(newTaskNameInput) {
+	console.log("inside blurTaskName");
+	
+	let newTaskName = newTaskNameInput.target.value;
+    
+    newTaskNameInput.target.classList.add('hide');
+    
+    // let taskNameElement = document.getElementById(event.target.);
+    isEditing = false;
+}
+
 function clickedName(event){
     console.log("Something has been clicked in the DOM");
-    console.log(event.target.id);
+    console.log(event);
+    
+    //get the content of the taskname
+    let taskNameContent = event.target.innerHTML;
+    let taskNameInput;
+    console.log("content was: ", taskNameContent);
+    
+    
+    if(!isEditing){
+		
+    	taskNameID = event.target.id;
+    	
+    	event.target.classList.add('hide');
+    	
+        taskNameInput = document.getElementById(taskNameID + '-modify');
+		
+        
+        taskNameInput.value = taskNameContent;
+                
+        taskNameInput.classList.remove('hide');
+        taskNameInput.focus();
+        
+        taskNameInput.addEventListener('blur', blurTaskName);
+        isEditing = true;
+	}
+	
+	
 
-    event.target.classList.add('hide');
-
-    console.log(event.target.id + '-modify');
-    document.getElementById(event.target.id + '-modify').classList.remove('hide');
+    
     // event.target.nodeType =
 }
 
@@ -133,26 +168,16 @@ function createTaskPanel(taskCount) {
             <p class="times"></p>
         </div>`;
 
-	let testEvent = document.getElementById(`task-name-${taskCount}`);
-
-	testEvent.addEventListener('click', clickedName)
+	let taskName = document.getElementById(`task-name-${taskCount}`);
+    
+    taskName.addEventListener('click', clickedName)
 }
 
 function getAmOrPM() {
-	//grab the AMPM inputs
-
-	// let settingsAMPM = {};
-
-	// settingsAMPM.startPM = startTimeFrameBtn.value == 'pm';
-	// settingsAMPM.endPM = endTimeFrameBtn.value == 'pm';
-
-
 	return {
-	    startPm: startTimeFrameBtn.value == 'pm',
-        endPM: endTimeFrameBtn.value == 'pm'
+	    startPm: startTimeFrameBtn.value === 'pm',
+        endPM: endTimeFrameBtn.value === 'pm'
     };
-
-	// return settingsAMPM;
 }
 
 
@@ -176,21 +201,21 @@ function confirmInputs(currentTaskObj) {
 	let startHourInMinutes = getMinutesFromHours(currentTaskObj.startTimes.hour);
 	let endHourInMinutes = getMinutesFromHours(currentTaskObj.endTimes.hour);
 
-	totalStartMinutes = startHourInMinutes + currentTaskObj.startTimes.minutes;
-	totalEndMinutes = endHourInMinutes + currentTaskObj.endTimes.minutes;
+	TOTAL_START_MINUTES = startHourInMinutes + currentTaskObj.startTimes.minutes;
+	TOTAL_END_MINUTES = endHourInMinutes + currentTaskObj.endTimes.minutes;
 
 
-	if (totalStartMinutes == totalEndMinutes) {
+	if (TOTAL_START_MINUTES === TOTAL_END_MINUTES) {
 		displayErrorMessage(errorText.sameTimes);
 		return false;
 	}
 
-	if(totalStartMinutes >= totalEndMinutes){
+	if(TOTAL_START_MINUTES >= TOTAL_END_MINUTES){
 	    displayErrorMessage(errorText.higherStartTime);
         return false;
     }
 
-	if (totalStartMinutes < totalEndMinutes) {
+	if (TOTAL_START_MINUTES < TOTAL_END_MINUTES) {
 		return true;
 	}
 
@@ -282,9 +307,9 @@ function displayTimes(savedTimes, taskCount) {
     let totalTimeParagraph = document.querySelector('#total-time');
     
     
-    let totalHours = getHours(totalEndMinutes - totalStartMinutes);
+    let totalHours = getHours(TOTAL_END_MINUTES - TOTAL_START_MINUTES);
     
-    let totalMinutes = getRemainingMinutes(totalEndMinutes - totalStartMinutes);
+    let totalMinutes = getRemainingMinutes(TOTAL_END_MINUTES - TOTAL_START_MINUTES);
     
     console.log('totalHours: ', totalHours);
     
@@ -317,13 +342,13 @@ function SetTime(timeFrame) {
 
 	console.log(timeBodyBtn.value);
 
-	if (timeBodyBtn.innerHTML == 'Set PM') {
+	if (timeBodyBtn.innerHTML === 'Set PM') {
 		timeBodyBtn.innerHTML = "Set AM";
 		timeBodyBtn.value = 'pm';
 		timeBody.classList.remove('day-time');
 		timeBody.classList.add('night-time');
 
-	} else if (timeBodyBtn.innerHTML == 'Set AM') {
+	} else if (timeBodyBtn.innerHTML === 'Set AM') {
 		timeBodyBtn.innerHTML = 'Set PM';
 		timeBodyBtn.value = 'am';
 		timeBody.classList.remove('night-time');
