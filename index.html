@@ -9,7 +9,6 @@
 	
 	<link rel="apple-touch-icon" href="apple-touch-icon.png">
 	<!-- Place favicon.ico in the root directory -->
-	<link rel="stylesheet" href="css/normalize.css">
 	
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
@@ -21,9 +20,8 @@
 	
 	<!-- Latest compiled and minified JavaScript -->
 	
-	<link rel="stylesheet" href="css/main.css">
 	
-	<script src="js/vendor/modernizr-2.8.3.min.js"></script>
+	<script src="./src/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 <body>
 <!--[if lt IE 8]>
@@ -60,9 +58,6 @@
 				<div class="panel panel-default">
 					<div class="panel-body day-time" id="start-body">
 						<div class="input-group" id="start-time-group">
-							<!--<input type="radio" id="start-am" name="start-ampm" value="start-am" required> AM-->
-							<!--<input type="radio" id="start-pm" name="start-ampm" value="start-pm" required> PM-->
-							
 							<span class="input-group-btn" id="startTime-addon">
 								<button class="btn btn-default" type="button" id='start-time-btn' onclick="SetTime('start')" value="am">Set PM</button>
 							</span>
@@ -96,8 +91,6 @@
 				<div class="panel panel-default">
 					<div class="panel-body day-time" id="end-body">
 						<div class="input-group" id="end-time-group">
-							<!--<input type="radio" id="end-am" name="end-ampm" value="end-am" required> AM-->
-							<!--<input type="radio" id="end-pm" name="end-ampm" value="end-pm" required> PM-->
 							<span class="input-group-btn" id="endTime-addon">
 								<button class="btn btn-default" type="button" id='end-time-btn' onclick="SetTime('end')" value="am">Set PM</button>
 							</span>
@@ -135,18 +128,13 @@
 	</form>
 	
 	<div class="task-holder">
-		<!--<div class="row" id="task-0">-->
-		<!--<div id="task-name-0"></div>-->
-		<!--<div id="start-time-0"></div>-->
-		<!--<div id="end-time-0"></div>-->
-		<!--<div id="total-time-0"></div>-->
-		<!--</div>-->
 	</div>
 
 
 </div>
 
-<script src="js/main.js"></script>
+
+<script src="dist/bundle.js"></script>
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <!-- Include all compiled plugins (below), or include individual files as needed -->

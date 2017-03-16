@@ -1,0 +1,83 @@
+@import "boilerplate";
+
+.title{
+  width: 100%;
+  text-align: center;
+}
+
+.title h1{
+  width: auto;
+  display: inline-block;
+}
+
+.title p{
+  width: auto;
+}
+
+#start-body,
+#end-body{
+  /*background-color: #fff;*/
+  -webkit-transition: all 1s;
+  -moz-transition: all 1s;
+  -ms-transition: all 1s;
+  -o-transition: all 1s;
+  transition: all 1s;
+}
+
+.day-time{
+  background-color: #fff6ba;
+}
+
+
+.night-time{
+  background-color: blue;
+}
+
+.task-panel{
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+
+  flex-direction: column;
+
+  font-weight: bold;
+  text-align: left;
+  width: 100%;
+  padding: 15px;
+  margin: 20px 0;
+  -webkit-box-shadow: 12px 13px 5px -3px rgba(0,0,0,0.11);
+  -moz-box-shadow: 12px 13px 5px -3px rgba(0,0,0,0.11);
+  box-shadow: 12px 13px 5px -3px rgba(0,0,0,0.11);
+
+  border-radius: 14px 14px 14px 14px;
+  -moz-border-radius: 14px 14px 14px 14px;
+  -webkit-border-radius: 14px 14px 14px 14px;
+  border: 3px solid #131bad;
+}
+
+.task-title{
+  display: inline-block;
+}
+
+.task-total{
+  float: right;
+}
+
+.task-title,
+.task-total{
+  margin-top: 0;
+}
+
+.hide{
+  /*display: none;*/
+}
+
+.show-inline{
+  display: inline;
+}
+
+.show-block{
+  display: block;
+}
