@@ -1,5 +1,6 @@
 import * as TimeMath from "./modules/time-cock-math";
 import * as Task from "./modules/task";
+import * as Message from "./modules/messages";
 import * as Validator from "./modules/validator";
 
 import "../styles/styles.scss";
@@ -7,9 +8,6 @@ import "../styles/styles.scss";
 //input groups
 const startGroup = document.getElementById('start-time-group');
 const endGroup = document.getElementById('end-time-group');
-
-//error message holder
-const errorParent = document.getElementById('error-message');
 
 
 //startHourInMinutes + minutes;
@@ -27,19 +25,6 @@ let errorText = {
     higherStartTime: "Start time should be less than end time",
     sameTimes: "Times can't be the same"
 };
-
-function displayErrorMessage(errorMessage) {
-    errorParent.innerHTML = errorMessage;
-}
-
-
-function throwError(objectToError, addClass) {
-    if (addClass) {
-        objectToError.classList.add('has-error');
-    } else {
-        objectToError.classList.remove('has-error');
-    }
-}
 
 
 function getTotalTimes() {
@@ -87,12 +72,12 @@ function confirmInputs(currentTaskObj) {
     
     
     if (TOTAL_START_MINUTES === TOTAL_END_MINUTES) {
-        displayErrorMessage(errorText.sameTimes);
+        Message.error(errorText.sameTimes);
         return false;
     }
     
     if(TOTAL_START_MINUTES >= TOTAL_END_MINUTES){
-        displayErrorMessage(errorText.higherStartTime);
+        Message.error(errorText.higherStartTime);
         return false;
     }
     
@@ -106,8 +91,9 @@ function confirmInputs(currentTaskObj) {
 
 function grabValues() {
     
+    console.log('should work');
     
-    displayErrorMessage('');
+    Message.clear();
     
     //will evaluate to true if each group is confirmed
     let startGroupChecked, endGroupChecked;
@@ -116,26 +102,26 @@ function grabValues() {
     
     //need a function to check that the second time is not smaller than the first time
     if (!confirmInputs(currentTask)) {
-        displayErrorMessage(errorText.higherStartTime);
+        Message.error(errorText.higherStartTime);
         return false;
     }
     
     
     //check the first group for validation
     if (Validator.checkGroups(currentTask.startTimes)) {
-        throwError(startGroup, false);
+        Message.throwError(startGroup, false);
         startGroupChecked = true;
     } else {
-        throwError(startGroup, true);
+        Message.throwError(startGroup, true);
         startGroupChecked = false;
     }
     
     //check the second group for validation
     if (Validator.checkGroups(currentTask.endTimes)) {
-        throwError(endGroup, false);
+        Message.throwError(endGroup, false);
         endGroupChecked = true;
     } else {
-        throwError(endGroup, true);
+        Message.throwError(endGroup, true);
         endGroupChecked = false;
     }
     

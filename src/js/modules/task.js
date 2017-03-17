@@ -7,11 +7,11 @@ let taskNameID = '';
 let isEditing = false;
 
 //inputs
-let taskNameInput = document.getElementById('task-input');
-let startTimeHourInput = document.getElementById('start-time-hour');
-let startTimeMinuteInput = document.getElementById('start-time-minutes');
-let endTimeHourInput = document.getElementById('end-time-hour');
-let endTimeMinuteInput = document.getElementById('end-time-minutes');
+const taskNameInput = document.getElementById('task-input');
+const startTimeHourInput = document.getElementById('start-time-hour');
+const startTimeMinuteInput = document.getElementById('start-time-minutes');
+const endTimeHourInput = document.getElementById('end-time-hour');
+const endTimeMinuteInput = document.getElementById('end-time-minutes');
 
 //buttons
 const startTimeFrameBtn = document.getElementById('start-time-btn');
