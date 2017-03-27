@@ -7,7 +7,7 @@
 	<meta name="description" content="">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	
-	<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+	<link rel="apple-touch-icon" href="apple-touch-icon.png">
 	<!-- Place favicon.ico in the root directory -->
 	
 	<!-- Latest compiled and minified CSS -->
@@ -21,7 +21,7 @@
 	<!-- Latest compiled and minified JavaScript -->
 	
 	
-	<script src="js/vendor/modernizr-2.8.3.min.js"></script>
+	<script src="./src/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
 <body>
 <!--[if lt IE 8]>
@@ -33,7 +33,7 @@
 <div class="container">
 	<div class="row">
 		<div class="title">
-			<p>Time-Clock dfsdf</p>
+			<p>Time-Clock</p>
 			<p>A simple app to keep track of your daily hours</p>
 		</div>
 	
@@ -59,7 +59,7 @@
 					<div class="panel-body day-time" id="start-body">
 						<div class="input-group" id="start-time-group">
 							<span class="input-group-btn" id="startTime-addon">
-								<button class="btn btn-default" type="button" id='start-time-btn' onclick="SetTime('start')" value="am">Set PM</button>
+								<button class="btn btn-default" type="button" id='start-time-btn' onclick="setAmOrPm('start')" value="am">Set PM</button>
 							</span>
 							<input type="text"
 							       maxlength="2"
@@ -92,7 +92,7 @@
 					<div class="panel-body day-time" id="end-body">
 						<div class="input-group" id="end-time-group">
 							<span class="input-group-btn" id="endTime-addon">
-								<button class="btn btn-default" type="button" id='end-time-btn' onclick="SetTime('end')" value="am">Set PM</button>
+								<button class="btn btn-default" type="button" id='end-time-btn' onclick="setAmOrPm('end')" value="am">Set PM</button>
 							</span>
 							<input type="text"
 							       maxlength="2"

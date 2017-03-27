@@ -1,7 +1,8 @@
-import * as TimeMath from "./modules/time-cock-math";
+import * as TimeMath from "./modules/time-clock-math";
 import * as Task from "./modules/task";
 import * as Message from "./modules/messages";
 import * as Validator from "./modules/validator";
+import * as TaskService from "./modules/task-service";
 
 import "../styles/styles.scss";
 
@@ -16,8 +17,6 @@ window.TOTAL_END_MINUTES = 0;
 
 let totalTasks = 0;
 
-//holds all the approved times
-let timeCollections = [];
 
 let errorText = {
     notANumber: "Please inter a valid integer",
@@ -27,48 +26,28 @@ let errorText = {
 };
 
 
-function getTotalTimes() {
-    console.log("inside getTotalTimes()");
-    console.log(timeCollections);
+function confirmInputs(currentTask) {
     
-    let totalSavedHours = 0;
-    let totalSavedMinutes = 0;
-    
-    
-    for(let i = 0; i < timeCollections.length; i++){
-        totalSavedHours += timeCollections[i].totalTimeSpentHours;
-        totalSavedMinutes += timeCollections[i].totalTimeSpentMinutes;
-    }
-    
-    totalSavedMinutes += totalSavedHours * 60;
-    
-    return {totalHours: TimeMath.getHours(totalSavedMinutes), totalMinutes: TimeMath.getRemainingMinutes(totalSavedMinutes)};
-    
-}
-
-
-function confirmInputs(currentTaskObj) {
-    
-    
-    if (currentTaskObj.startTimes.pm) {
-        if (currentTaskObj.startTimes.hour < 12) {
-            currentTaskObj.startTimes.hour = currentTaskObj.startTimes.hour + 12;
+    if (currentTask.startTimes.pm === true) {
+       
+        if (currentTask.startTimes.hour < 12) {
+            currentTask.startTimes.hour += 12;
         }
         
     }
     
-    if (currentTaskObj.endTimes.pm) {
-        if (currentTaskObj.endTimes.hour < 12) {
-            currentTaskObj.endTimes.hour = currentTaskObj.endTimes.hour + 12;
+    if (currentTask.endTimes.pm === true) {
+        if (currentTask.endTimes.hour < 12) {
+            currentTask.endTimes.hour += 12;
         }
     }
     
     //convert hours to minutes
-    let startHourInMinutes = TimeMath.getMinutesFromHours(currentTaskObj.startTimes.hour);
-    let endHourInMinutes = TimeMath.getMinutesFromHours(currentTaskObj.endTimes.hour);
+    let startHourInMinutes = TimeMath.getMinutesFromHours(currentTask.startTimes.hour);
+    let endHourInMinutes = TimeMath.getMinutesFromHours(currentTask.endTimes.hour);
     
-    TOTAL_START_MINUTES = startHourInMinutes + currentTaskObj.startTimes.minutes;
-    TOTAL_END_MINUTES = endHourInMinutes + currentTaskObj.endTimes.minutes;
+    TOTAL_START_MINUTES = startHourInMinutes + currentTask.startTimes.minutes;
+    TOTAL_END_MINUTES = endHourInMinutes + currentTask.endTimes.minutes;
     
     
     if (TOTAL_START_MINUTES === TOTAL_END_MINUTES) {
@@ -88,24 +67,22 @@ function confirmInputs(currentTaskObj) {
 }
 
 
-
 function grabValues() {
-    
-    console.log('should work');
-    
+
     Message.clear();
     
     //will evaluate to true if each group is confirmed
     let startGroupChecked, endGroupChecked;
     
-    let currentTask = Task.createTask();
+   
+    let currentTask = Task.createTask(totalTasks);
+    
     
     //need a function to check that the second time is not smaller than the first time
     if (!confirmInputs(currentTask)) {
         Message.error(errorText.higherStartTime);
         return false;
     }
-    
     
     //check the first group for validation
     if (Validator.checkGroups(currentTask.startTimes)) {
@@ -129,24 +106,24 @@ function grabValues() {
     //when both groups are confirmed move on and save the time inputs
     if (startGroupChecked && endGroupChecked) {
         //give this current time obj an id
-        currentTask.thisTaskID = totalTasks;
-        
-        timeCollections.push(currentTask);
+        currentTask.taskID = totalTasks;
+    
+        TaskService.timeCollections.push(currentTask);
         
         displayTimes(currentTask, totalTasks);
         
         document.querySelector('#time-form').reset();
-        
-        totalTasks++;
+     
+        totalTasks += 1;
     }
     
 }
 window.grabValues = grabValues;
 
-function displayTimes(savedTimes, taskCount) {
+function displayTimes(currentTask, taskCount) {
     
     //create the elements first because we reference them via ID
-    Task.createPanel(taskCount);
+    Task.createPanel(currentTask);
     
     
     let taskNameSelector = document.querySelector(`#task-${taskCount}-title`);
@@ -156,10 +133,12 @@ function displayTimes(savedTimes, taskCount) {
     
     let totalTimeParagraph = document.querySelector('#total-time');
     
-    
     let totalHours = TimeMath.getHours(TOTAL_END_MINUTES - TOTAL_START_MINUTES);
     
     let totalMinutes = TimeMath.getRemainingMinutes(TOTAL_END_MINUTES - TOTAL_START_MINUTES);
+    
+    let startTime = `${currentTask.startTimes.hour}:${currentTask.startTimes.minutes}`;
+    let endTime = `${currentTask.endTimes.hour}:${currentTask.endTimes.minutes}`;
     
     console.log('totalHours: ', totalHours);
     
@@ -167,31 +146,27 @@ function displayTimes(savedTimes, taskCount) {
         totalHours = 0;
     }
     
-    let startTime = `${savedTimes.startTimes.hour}:${savedTimes.startTimes.minutes}`;
-    let endTime = `${savedTimes.endTimes.hour}:${savedTimes.endTimes.minutes}`;
     
-    taskNameSelector.innerHTML = `${savedTimes.taskName}`;
+    taskNameSelector.innerHTML = `${currentTask.taskName}`;
     totalTimeSelector.innerHTML = `Time: ${totalHours}.${totalMinutes}`;
     
     timesParagraph.innerHTML = `${startTime} - ${endTime}`;
     
-    timeCollections[taskCount].totalTimeSpentHours = totalHours;
-    timeCollections[taskCount].totalTimeSpentMinutes = totalMinutes;
+    TaskService.timeCollections[taskCount].totalTimeSpentHours = totalHours;
+    TaskService.timeCollections[taskCount].totalTimeSpentMinutes = totalMinutes;
     
     
-    let {totalHours: taskHours, totalMinutes: taskMinutes} = getTotalTimes();
+    let {totalHours: taskHours, totalMinutes: taskMinutes} = TaskService.getTotalTimes();
     
     totalTimeParagraph.innerHTML = `Total Time: ${taskHours}.${taskMinutes}`;
-    
 }
 
-function SetTime(timeFrame) {
-    
+function setAmOrPm(timeFrame) {
+
     let timeBody = document.getElementById(`${timeFrame}-body`);
     let timeBodyBtn = document.getElementById(`${timeFrame}-time-btn`);
     
-    console.log(timeBodyBtn.value);
-    
+
     if (timeBodyBtn.innerHTML === 'Set PM') {
         timeBodyBtn.innerHTML = "Set AM";
         timeBodyBtn.value = 'pm';
@@ -206,3 +181,4 @@ function SetTime(timeFrame) {
     }
     
 }
+window.setAmOrPm = setAmOrPm;

@@ -1,7 +1,9 @@
 /**
  * Created by Rico on 3/16/2017.
  */
-'use strict';
+import * as TaskService from "./task-service";
+
+"use strict";
 
 let taskNameID = '';
 let isEditing = false;
@@ -17,23 +19,23 @@ const endTimeMinuteInput = document.getElementById('end-time-minutes');
 const startTimeFrameBtn = document.getElementById('start-time-btn');
 const endTimeFrameBtn = document.getElementById('end-time-btn');
 
-
+//will hold the current editing value
+let inEditTaskName;
 
 function getAmOrPM() {
     return {
-        startPm: startTimeFrameBtn.value === 'pm',
+        startPM: startTimeFrameBtn.value === 'pm',
         endPM: endTimeFrameBtn.value === 'pm'
     };
 }
-
 
 export function createTask() {
     
     //returns an object with startTime and endTime AMPM values
     let {startPM, endPM} = getAmOrPM();
-    
     return {
         taskName: taskNameInput.value,
+        taskID: 0,
         startTimes: {
             pm: startPM,
             hour: +startTimeHourInput.value,
@@ -47,73 +49,93 @@ export function createTask() {
     };
 }
 
-
-
-function blurTaskName(newTaskNameInput) {
-    console.log("inside blurTaskName");
-    
-    let newTaskName = newTaskNameInput.target.value;
-    
-    newTaskNameInput.target.classList.add('hide');
-    
-    // let taskNameElement = document.getElementById(event.target.);
+function enableEditing() {
     isEditing = false;
 }
 
 
-function clickedName(event){
-    console.log("Something has been clicked in the DOM");
-    console.log(event);
+function blurTaskName(event) {
     
-    //get the content of the taskname
-    let taskNameContent = event.target.innerHTML;
-    let taskNameInput;
-    console.log("content was: ", taskNameContent);
+    console.log("inside blurTaskName", event);
     
+    let newTaskName = event.target.value;
     
-    if(!isEditing){
+    event.target.classList.add('hide');
+    
+    inEditTaskName.innerHTML = newTaskName;
+    inEditTaskName.classList.remove('hide');
+    setTimeout(enableEditing, 500);
+}
+
+
+function clickedName(event) {
+    if (!isEditing) {
+        console.log("Something has been clicked in the DOM");
+        console.log(event);
         
+        //get the content of the taskname
+        inEditTaskName = event.target;
+    
+        
+        let taskNameContent = inEditTaskName.innerHTML;
+        let taskNameEditInput;
+        
+
         taskNameID = event.target.id;
         
-        event.target.classList.add('hide');
+        inEditTaskName.classList.add('hide');
         
-        taskNameInput = document.getElementById(taskNameID + '-modify');
+        taskNameEditInput = document.getElementById(taskNameID + '-modify');
         
+        taskNameEditInput.value = taskNameContent;
         
-        taskNameInput.value = taskNameContent;
+        taskNameEditInput.classList.remove('hide');
+        taskNameEditInput.focus();
+    
+        taskNameEditInput.addEventListener('keydown', function (e) {
+            //13 is the keycode for Enter
+            if(e.keyCode == 13){
+                blurTaskName(e);
+            }
+        });
         
-        taskNameInput.classList.remove('hide');
-        taskNameInput.focus();
-        
-        taskNameInput.addEventListener('blur', blurTaskName);
+        taskNameEditInput.addEventListener('blur', blurTaskName);
         isEditing = true;
     }
     
 }
 
 
+
 //stamps out the template for the new task panel
-export function createPanel(taskCount) {
+export function createPanel(currentTask) {
     
     let newTaskParent = document.createElement('div');
     
-    newTaskParent.id = `task-${taskCount}`;
+    newTaskParent.id = `task-${currentTask.taskID}`;
+    
+    // newTaskParent.setAttribute('data-taskCount', currentTask.taskID);
     
     newTaskParent.classList.add('row', 'task-panel');
     
     document.querySelector('.task-holder').appendChild(newTaskParent);
     
     newTaskParent.innerHTML =
-        `<div id="task-name-${taskCount}">
-            <p class="task-title" id="task-${taskCount}-title"></p>
-            <input class="task-input-modify hide" id="task-${taskCount}-title-modify" type="text">
-            <p class="task-total" id="total-time-${taskCount}"></p>
+        `<div id="task-name-${currentTask.taskID}">
+            <p class="task-title" id="task-${currentTask.taskID}-title"></p>
+            <input class="task-input-modify hide" id="task-${currentTask.taskID}-title-modify" type="text">
+            <p class="task-total" id="total-time-${currentTask.taskID}"></p>
         </div>
-        <div id="times-${taskCount}">
+        <div id="times-${currentTask.taskID}">
             <p class="times"></p>
+        </div>
+        <div id="delete-${currentTask.taskID}" data-task-count="${currentTask.taskID}">
+        delete this task
         </div>`;
     
-    let taskName = document.getElementById(`task-name-${taskCount}`);
+    let taskName = document.getElementById(`task-${currentTask.taskID}-title`);
+    let deleteTaskBtn = document.getElementById(`delete-${currentTask.taskID}`);
     
-    taskName.addEventListener('click', clickedName)
+    deleteTaskBtn.addEventListener('click', TaskService.deleteTask);
+    taskName.addEventListener('click', clickedName);
 }
