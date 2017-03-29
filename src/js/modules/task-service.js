@@ -5,6 +5,7 @@
  */
 
 import * as TimeMath from "./time-clock-math";
+import * as Message from "./messages";
 
 "use strict";
 
@@ -13,6 +14,9 @@ const totalTimeParagraph = document.querySelector('#total-time');
 
 //holds all the approved times
 export let timeCollections = [];
+
+export let TOTAL_START_MINUTES = 0;
+export let TOTAL_END_MINUTES = 0;
 
 export function getTotalTimes() {
     console.log("inside getTotalTimes()");
@@ -82,4 +86,44 @@ export function createUniqueId () {
     } while (idStr.length < idStrLen);
     
     return (idStr);
+}
+
+export function confirmInputs(currentTask) {
+    
+    if (currentTask.startTimes.pm === true) {
+        
+        if (currentTask.startTimes.hour < 12) {
+            currentTask.startTimes.hour += 12;
+        }
+        
+    }
+    
+    if (currentTask.endTimes.pm === true) {
+        if (currentTask.endTimes.hour < 12) {
+            currentTask.endTimes.hour += 12;
+        }
+    }
+    
+    //convert hours to minutes
+    let startHourInMinutes = TimeMath.getMinutesFromHours(currentTask.startTimes.hour);
+    let endHourInMinutes = TimeMath.getMinutesFromHours(currentTask.endTimes.hour);
+    
+    TOTAL_START_MINUTES = startHourInMinutes + currentTask.startTimes.minutes;
+    TOTAL_END_MINUTES = endHourInMinutes + currentTask.endTimes.minutes;
+    
+    
+    if (TOTAL_START_MINUTES === TOTAL_END_MINUTES) {
+        Message.error(Message.errorText.sameTimes);
+        return false;
+    }
+    
+    if(TOTAL_START_MINUTES >= TOTAL_END_MINUTES){
+        Message.error(Message.errorText.higherStartTime);
+        return false;
+    }
+    
+    if (TOTAL_START_MINUTES < TOTAL_END_MINUTES) {
+        return true;
+    }
+    
 }

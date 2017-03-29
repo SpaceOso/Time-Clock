@@ -11,62 +11,7 @@ const startGroup = document.getElementById('start-time-group');
 const endGroup = document.getElementById('end-time-group');
 
 
-//startHourInMinutes + minutes;
-window.TOTAL_START_MINUTES = 0;
-window.TOTAL_END_MINUTES = 0;
-
-
 let totalTasks = 0;
-
-
-let errorText = {
-    notANumber: "Please inter a valid integer",
-    notAllForms: "Please enter a valid time into the remaining boxes",
-    higherStartTime: "Start time should be less than end time",
-    sameTimes: "Times can't be the same"
-};
-
-
-function confirmInputs(currentTask) {
-    
-    if (currentTask.startTimes.pm === true) {
-       
-        if (currentTask.startTimes.hour < 12) {
-            currentTask.startTimes.hour += 12;
-        }
-        
-    }
-    
-    if (currentTask.endTimes.pm === true) {
-        if (currentTask.endTimes.hour < 12) {
-            currentTask.endTimes.hour += 12;
-        }
-    }
-    
-    //convert hours to minutes
-    let startHourInMinutes = TimeMath.getMinutesFromHours(currentTask.startTimes.hour);
-    let endHourInMinutes = TimeMath.getMinutesFromHours(currentTask.endTimes.hour);
-    
-    TOTAL_START_MINUTES = startHourInMinutes + currentTask.startTimes.minutes;
-    TOTAL_END_MINUTES = endHourInMinutes + currentTask.endTimes.minutes;
-    
-    
-    if (TOTAL_START_MINUTES === TOTAL_END_MINUTES) {
-        Message.error(errorText.sameTimes);
-        return false;
-    }
-    
-    if(TOTAL_START_MINUTES >= TOTAL_END_MINUTES){
-        Message.error(errorText.higherStartTime);
-        return false;
-    }
-    
-    if (TOTAL_START_MINUTES < TOTAL_END_MINUTES) {
-        return true;
-    }
-    
-}
-
 
 function grabValues() {
 
@@ -79,8 +24,7 @@ function grabValues() {
     
     
     //need a function to check that the second time is not smaller than the first time
-    if (!confirmInputs(currentTask)) {
-        Message.error(errorText.higherStartTime);
+    if (!TaskService.confirmInputs(currentTask)) {
         return false;
     }
     
@@ -104,18 +48,16 @@ function grabValues() {
     
     
     //when both groups are confirmed move on and save the time inputs
-    if (startGroupChecked && endGroupChecked) {
-        //give this current time obj an id
-        totalTasks = TaskService.getCollectionLength();
+    if (startGroupChecked === true && endGroupChecked === true) {
         
-        // currentTask.taskID = totalTasks;
         currentTask.taskID = TaskService.createUniqueId();
     
         TaskService.timeCollections.push(currentTask);
         
-        displayTimes(currentTask, totalTasks);
+        displayTimes(currentTask);
+        document.getElementById('task-input').blur();
+        document.getElementById('time-form').reset();
         
-        document.querySelector('#time-form').reset();
         
     }
     
@@ -133,11 +75,9 @@ function displayTimes(currentTask) {
     
     let timesParagraph = document.querySelector(`#times-${currentTask.taskID} p`);
     
-    // let totalTimeParagraph = document.querySelector('#total-time');
+    let totalHours = TimeMath.getHours(TaskService.TOTAL_END_MINUTES - TaskService.TOTAL_START_MINUTES);
     
-    let totalHours = TimeMath.getHours(TOTAL_END_MINUTES - TOTAL_START_MINUTES);
-    
-    let totalMinutes = TimeMath.getRemainingMinutes(TOTAL_END_MINUTES - TOTAL_START_MINUTES);
+    let totalMinutes = TimeMath.getRemainingMinutes(TaskService.TOTAL_END_MINUTES - TaskService.TOTAL_START_MINUTES);
     
     let startTime = `${currentTask.startTimes.hour}:${currentTask.startTimes.minutes}`;
     let endTime = `${currentTask.endTimes.hour}:${currentTask.endTimes.minutes}`;
