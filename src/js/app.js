@@ -15,6 +15,7 @@ const endGroup = document.getElementById('end-time-group');
 window.TOTAL_START_MINUTES = 0;
 window.TOTAL_END_MINUTES = 0;
 
+
 let totalTasks = 0;
 
 
@@ -74,7 +75,6 @@ function grabValues() {
     //will evaluate to true if each group is confirmed
     let startGroupChecked, endGroupChecked;
     
-   
     let currentTask = Task.createTask(totalTasks);
     
     
@@ -106,32 +106,34 @@ function grabValues() {
     //when both groups are confirmed move on and save the time inputs
     if (startGroupChecked && endGroupChecked) {
         //give this current time obj an id
-        currentTask.taskID = totalTasks;
+        totalTasks = TaskService.getCollectionLength();
+        
+        // currentTask.taskID = totalTasks;
+        currentTask.taskID = TaskService.createUniqueId();
     
         TaskService.timeCollections.push(currentTask);
         
         displayTimes(currentTask, totalTasks);
         
         document.querySelector('#time-form').reset();
-     
-        totalTasks += 1;
+        
     }
     
 }
 window.grabValues = grabValues;
 
-function displayTimes(currentTask, taskCount) {
+function displayTimes(currentTask) {
+     console.log('displayTimes(currentTask, taskCount)', currentTask, currentTask.taskID);
     
-    //create the elements first because we reference them via ID
+     //create the elements first because we reference them via ID
     Task.createPanel(currentTask);
     
+    let taskNameSelector = document.querySelector(`#task-${currentTask.taskID}-title`);
+    let totalTimeSelector = document.querySelector(`#total-time-${currentTask.taskID}`);
     
-    let taskNameSelector = document.querySelector(`#task-${taskCount}-title`);
-    let totalTimeSelector = document.querySelector(`#total-time-${taskCount}`);
+    let timesParagraph = document.querySelector(`#times-${currentTask.taskID} p`);
     
-    let timesParagraph = document.querySelector(`#times-${taskCount} p`);
-    
-    let totalTimeParagraph = document.querySelector('#total-time');
+    // let totalTimeParagraph = document.querySelector('#total-time');
     
     let totalHours = TimeMath.getHours(TOTAL_END_MINUTES - TOTAL_START_MINUTES);
     
@@ -146,19 +148,18 @@ function displayTimes(currentTask, taskCount) {
         totalHours = 0;
     }
     
-    
+    console.log(currentTask.taskName);
     taskNameSelector.innerHTML = `${currentTask.taskName}`;
     totalTimeSelector.innerHTML = `Time: ${totalHours}.${totalMinutes}`;
     
     timesParagraph.innerHTML = `${startTime} - ${endTime}`;
     
-    TaskService.timeCollections[taskCount].totalTimeSpentHours = totalHours;
-    TaskService.timeCollections[taskCount].totalTimeSpentMinutes = totalMinutes;
     
+    currentTask.totalTimeSpentHours = totalHours;
+    currentTask.totalTimeSpentMinutes = totalMinutes;
     
-    let {totalHours: taskHours, totalMinutes: taskMinutes} = TaskService.getTotalTimes();
+    TaskService.updateTotalTime();
     
-    totalTimeParagraph.innerHTML = `Total Time: ${taskHours}.${taskMinutes}`;
 }
 
 function setAmOrPm(timeFrame) {

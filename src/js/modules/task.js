@@ -1,5 +1,7 @@
 /**
  * Created by Rico on 3/16/2017.
+ *
+ * This module deals with creating/deleting and updating the task panels that get created after the user enters a time.
  */
 import * as TaskService from "./task-service";
 
@@ -19,8 +21,12 @@ const endTimeMinuteInput = document.getElementById('end-time-minutes');
 const startTimeFrameBtn = document.getElementById('start-time-btn');
 const endTimeFrameBtn = document.getElementById('end-time-btn');
 
+
+
 //will hold the current editing value
 let inEditTaskName;
+
+
 
 function getAmOrPM() {
     return {
@@ -35,7 +41,7 @@ export function createTask() {
     let {startPM, endPM} = getAmOrPM();
     return {
         taskName: taskNameInput.value,
-        taskID: 0,
+        taskID: 'id',
         startTimes: {
             pm: startPM,
             hour: +startTimeHourInput.value,
@@ -45,7 +51,9 @@ export function createTask() {
             pm: endPM,
             hour: +endTimeHourInput.value,
             minutes: +endTimeMinuteInput.value
-        }
+        },
+        totalTimeSpentHours: 0,
+        totalTimeSpentMinutes: 0
     };
 }
 
@@ -104,7 +112,6 @@ function clickedName(event) {
     }
     
 }
-
 
 
 //stamps out the template for the new task panel
