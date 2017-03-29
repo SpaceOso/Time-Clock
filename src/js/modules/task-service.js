@@ -90,6 +90,7 @@ export function createUniqueId () {
 
 export function confirmInputs(currentTask) {
     
+    //if the pm property is set to true then we need to convert it to military time
     if (currentTask.startTimes.pm === true) {
         
         if (currentTask.startTimes.hour < 12) {

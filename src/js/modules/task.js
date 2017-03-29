@@ -4,6 +4,8 @@
  * This module deals with creating/deleting and updating the task panels that get created after the user enters a time.
  */
 import * as TaskService from "./task-service";
+import * as TimeFields from "./time-fields";
+import * as Message from "./messages";
 
 "use strict";
 
@@ -17,15 +19,13 @@ const startTimeMinuteInput = document.getElementById('start-time-minutes');
 const endTimeHourInput = document.getElementById('end-time-hour');
 const endTimeMinuteInput = document.getElementById('end-time-minutes');
 
+
 //buttons
 const startTimeFrameBtn = document.getElementById('start-time-btn');
 const endTimeFrameBtn = document.getElementById('end-time-btn');
 
-
-
 //will hold the current editing value
 let inEditTaskName;
-
 
 
 function getAmOrPM() {
@@ -37,12 +37,14 @@ function getAmOrPM() {
 
 export function createTask() {
     //TODO it would be nice if before returning the task we did all the necessary validation
-
+    
     //returns an object with startTime and endTime AMPM values
     let {startPM, endPM} = getAmOrPM();
-
+    
+    
     let taskName = taskNameInput.value;
-
+    
+    
     let currentTask = {
         taskName: TaskService.confirmTaskName(taskName),
         taskID: 'id',
@@ -59,10 +61,23 @@ export function createTask() {
         totalTimeSpentHours: 0,
         totalTimeSpentMinutes: 0
     };
-
-    TaskService.confirmInputs(currentTask);
-
-    return currentTask;
+    
+    
+    if (TimeFields.validateTimeInputs(currentTask)) {
+        
+        if (TaskService.confirmInputs(currentTask)) {
+            currentTask.taskID = TaskService.createUniqueId();
+            
+            TaskService.timeCollections.push(currentTask);
+            
+            return currentTask;
+        }
+    } else {
+        
+        return false;
+    
+    }
+    
 }
 
 function enableEditing() {
@@ -91,12 +106,12 @@ function clickedName(event) {
         
         //get the content of the taskname
         inEditTaskName = event.target;
-    
+        
         
         let taskNameContent = inEditTaskName.innerHTML;
         let taskNameEditInput;
         
-
+        
         taskNameID = event.target.id;
         
         inEditTaskName.classList.add('hide');
@@ -107,10 +122,10 @@ function clickedName(event) {
         
         taskNameEditInput.classList.remove('hide');
         taskNameEditInput.focus();
-    
+        
         taskNameEditInput.addEventListener('keydown', function (e) {
             //13 is the keycode for Enter
-            if(e.keyCode == 13){
+            if (e.keyCode == 13) {
                 blurTaskName(e);
             }
         });

@@ -11,9 +11,9 @@ export let errorText = {
 
 export function throwError(objectToError, addClass) {
     if (addClass) {
-        objectToError.classList.add('has-error');
+        objectToError.classList.add('error');
     } else {
-        objectToError.classList.remove('has-error');
+        objectToError.classList.remove('error');
     }
 }
 

@@ -1,65 +1,23 @@
 import * as TimeMath from "./modules/time-clock-math";
 import * as Task from "./modules/task";
 import * as Message from "./modules/messages";
-import * as Validator from "./modules/validator";
 import * as TaskService from "./modules/task-service";
 
 import "../styles/styles.scss";
-
-//input groups
-const startGroup = document.getElementById('start-time-group');
-const endGroup = document.getElementById('end-time-group');
-
-
-let totalTasks = 0;
 
 function grabValues() {
 
     Message.clear();
     
-    //will evaluate to true if each group is confirmed
-    let startGroupChecked, endGroupChecked;
+    let currentTask = Task.createTask();
     
-    let currentTask = Task.createTask(totalTasks);
-    
-    
-    //need a function to check that the second time is not smaller than the first time
-    if (!TaskService.confirmInputs(currentTask)) {
-        return false;
-    }
-    
-    //check the first group for validation
-    if (Validator.checkGroups(currentTask.startTimes)) {
-        Message.throwError(startGroup, false);
-        startGroupChecked = true;
-    } else {
-        Message.throwError(startGroup, true);
-        startGroupChecked = false;
-    }
-    
-    //check the second group for validation
-    if (Validator.checkGroups(currentTask.endTimes)) {
-        Message.throwError(endGroup, false);
-        endGroupChecked = true;
-    } else {
-        Message.throwError(endGroup, true);
-        endGroupChecked = false;
-    }
-    
-    
-    //when both groups are confirmed move on and save the time inputs
-    if (startGroupChecked === true && endGroupChecked === true) {
-        
-        currentTask.taskID = TaskService.createUniqueId();
-    
-        TaskService.timeCollections.push(currentTask);
-        
-        displayTimes(currentTask);
+
+    if(currentTask !== false){
         document.getElementById('task-input').blur();
         document.getElementById('time-form').reset();
-        
-        
+        displayTimes(currentTask);
     }
+    
     
 }
 window.grabValues = grabValues;
