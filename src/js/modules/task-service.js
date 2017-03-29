@@ -127,3 +127,10 @@ export function confirmInputs(currentTask) {
     }
     
 }
+
+export function confirmTaskName(taskName){
+    //we need to check if the user entered blank characters such as spaces or tabs
+    //if they did we need to return a standard default message
+
+    return taskName.replace(/\s/g, '').length === 0 ? "Please Enter A Task Name" : taskName;
+}

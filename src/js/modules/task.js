@@ -39,8 +39,11 @@ export function createTask() {
     
     //returns an object with startTime and endTime AMPM values
     let {startPM, endPM} = getAmOrPM();
+
+    let taskName = taskNameInput.value;
+
     return {
-        taskName: taskNameInput.value,
+        taskName: TaskService.confirmTaskName(taskName),
         taskID: 'id',
         startTimes: {
             pm: startPM,
@@ -70,7 +73,7 @@ function blurTaskName(event) {
     
     event.target.classList.add('hide');
     
-    inEditTaskName.innerHTML = newTaskName;
+    inEditTaskName.innerHTML = TaskService.confirmTaskName(newTaskName);
     inEditTaskName.classList.remove('hide');
     setTimeout(enableEditing, 500);
 }
