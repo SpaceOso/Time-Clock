@@ -175,6 +175,14 @@ function createPanel(currentTask) {
 }
 
 
+function setTimes(timeObject){
+
+	const {hour, minutes} = timeObject;
+
+	return hour >= 13 ? `${hour - 12}:${minutes}pm` : `${hour}:${minutes}am`;
+
+}
+
 export function displayTimes(currentTask) {
 	console.log('displayTimes(currentTask, taskCount)', currentTask, currentTask.taskID);
 	
@@ -186,9 +194,12 @@ export function displayTimes(currentTask) {
 	let timesParagraph = document.querySelector(`#times-${currentTask.taskID} p`);
 	let totalHours = TimeMath.getHours(TaskService.TOTAL_END_MINUTES - TaskService.TOTAL_START_MINUTES);
 	let totalMinutes = TimeMath.getRemainingMinutes(TaskService.TOTAL_END_MINUTES - TaskService.TOTAL_START_MINUTES);
-	let startTime = `${currentTask.startTimes.hour}:${currentTask.startTimes.minutes}`;
-	let endTime = `${currentTask.endTimes.hour}:${currentTask.endTimes.minutes}`;
-	
+
+
+	let startTime = setTimes({hour: currentTask.startTimes.hour, minutes: currentTask.startTimes.minutes});
+	let endTime = setTimes({hour: currentTask.endTimes.hour, minutes: currentTask.endTimes.minutes});
+
+
 	console.log('totalHours: ', totalHours);
 	
 	if (totalHours < 1) {
