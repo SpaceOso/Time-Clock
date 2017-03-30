@@ -2,7 +2,7 @@
 //error message holder
 const errorParent = document.getElementById('error-message');
 
-export let errorText = {
+export const errorText = {
     notANumber: "Please inter a valid integer",
     notAllForms: "Please enter a valid time into the remaining boxes",
     higherStartTime: "Start time should be less than end time",

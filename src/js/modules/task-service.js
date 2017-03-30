@@ -6,6 +6,7 @@
 
 import * as TimeMath from "./time-clock-math";
 import * as Message from "./messages";
+import * as TimeFields from "./time-fields";
 
 "use strict";
 
@@ -115,15 +116,18 @@ export function confirmInputs(currentTask) {
     
     if (TOTAL_START_MINUTES === TOTAL_END_MINUTES) {
         Message.error(Message.errorText.sameTimes);
+        TimeFields.errorBothGroups(true);
         return false;
     }
     
     if(TOTAL_START_MINUTES >= TOTAL_END_MINUTES){
         Message.error(Message.errorText.higherStartTime);
+        TimeFields.errorBothGroups(true);
         return false;
     }
     
     if (TOTAL_START_MINUTES < TOTAL_END_MINUTES) {
+        TimeFields.errorBothGroups(false);
         return true;
     }
     

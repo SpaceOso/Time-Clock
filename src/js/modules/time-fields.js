@@ -38,10 +38,10 @@ export function validateTimeInputs(currentTask) {
     } else {
         
         Message.throwError(startGroup, true);
+	    Message.error(Message.errorText.notANumber);
         startGroupChecked = false;
     
     }
-    
     
     if (checkInputGroups(currentTask.endTimes)){
         
@@ -51,14 +51,22 @@ export function validateTimeInputs(currentTask) {
     } else {
         
         Message.throwError(endGroup, true);
+	    Message.error(Message.errorText.notANumber);
         endGroupChecked = false;
     
     }
     
     if(startGroupChecked === true && endGroupChecked === true){
+        Message.clear();
         return true;
     }else{
         return false;
     }
   
+}
+
+
+export function errorBothGroups(addOrRemove){
+    Message.throwError(startGroup, addOrRemove);
+    Message.throwError(endGroup, addOrRemove)
 }

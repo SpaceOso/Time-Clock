@@ -5,7 +5,7 @@
  */
 import * as TaskService from "./task-service";
 import * as TimeFields from "./time-fields";
-import * as Message from "./messages";
+import * as TimeMath from "./time-clock-math";
 
 "use strict";
 
@@ -29,143 +29,182 @@ let inEditTaskName;
 
 
 function getAmOrPM() {
-    return {
-        startPM: startTimeFrameBtn.value === 'pm',
-        endPM: endTimeFrameBtn.value === 'pm'
-    };
+	return {
+		startPM: startTimeFrameBtn.value === 'pm',
+		endPM: endTimeFrameBtn.value === 'pm'
+	};
 }
 
 export function createTask() {
-    //TODO it would be nice if before returning the task we did all the necessary validation
-    
-    //returns an object with startTime and endTime AMPM values
-    let {startPM, endPM} = getAmOrPM();
-    
-    
-    let taskName = taskNameInput.value;
-    
-    
-    let currentTask = {
-        taskName: TaskService.confirmTaskName(taskName),
-        taskID: 'id',
-        startTimes: {
-            pm: startPM,
-            hour: +startTimeHourInput.value,
-            minutes: +startTimeMinuteInput.value,
-        },
-        endTimes: {
-            pm: endPM,
-            hour: +endTimeHourInput.value,
-            minutes: +endTimeMinuteInput.value
-        },
-        totalTimeSpentHours: 0,
-        totalTimeSpentMinutes: 0
-    };
-    
-    
-    if (TimeFields.validateTimeInputs(currentTask)) {
-        
-        if (TaskService.confirmInputs(currentTask)) {
-            currentTask.taskID = TaskService.createUniqueId();
-            
-            TaskService.timeCollections.push(currentTask);
-            
-            return currentTask;
-        }
-    } else {
-        
-        return false;
-    
-    }
-    
+	//TODO it would be nice if before returning the task we did all the necessary validation
+	
+	//returns an object with startTime and endTime AMPM values
+	let {startPM, endPM} = getAmOrPM();
+	
+	
+	let taskName = taskNameInput.value;
+	
+	
+	let currentTask = {
+		taskName: TaskService.confirmTaskName(taskName),
+		taskID: 'id',
+		startTimes: {
+			pm: startPM,
+			hour: +startTimeHourInput.value,
+			minutes: +startTimeMinuteInput.value,
+		},
+		endTimes: {
+			pm: endPM,
+			hour: +endTimeHourInput.value,
+			minutes: +endTimeMinuteInput.value
+		},
+		totalTimeSpentHours: 0,
+		totalTimeSpentMinutes: 0
+	};
+	
+	
+	if (TimeFields.validateTimeInputs(currentTask)) {
+		console.log('returning this task:', currentTask);
+		
+		if (TaskService.confirmInputs(currentTask)) {
+			
+			currentTask.taskID = TaskService.createUniqueId();
+			
+			TaskService.timeCollections.push(currentTask);
+			
+			console.log('returning this task:', currentTask);
+			return currentTask;
+		} else {
+			return false;
+		}
+	} else {
+		
+		return false;
+		
+	}
+	
 }
 
 function enableEditing() {
-    isEditing = false;
+	isEditing = false;
 }
 
 
 function blurTaskName(event) {
-    
-    console.log("inside blurTaskName", event);
-    
-    let newTaskName = event.target.value;
-    
-    event.target.classList.add('hide');
-    
-    inEditTaskName.innerHTML = TaskService.confirmTaskName(newTaskName);
-    inEditTaskName.classList.remove('hide');
-    setTimeout(enableEditing, 500);
+	
+	console.log("inside blurTaskName", event);
+	
+	let newTaskName = event.target.value;
+	
+	event.target.classList.add('hide');
+	
+	inEditTaskName.innerHTML = TaskService.confirmTaskName(newTaskName);
+	inEditTaskName.classList.remove('hide');
+	setTimeout(enableEditing, 500);
 }
 
 
 function clickedName(event) {
-    if (!isEditing) {
-        console.log("Something has been clicked in the DOM");
-        console.log(event);
-        
-        //get the content of the taskname
-        inEditTaskName = event.target;
-        
-        
-        let taskNameContent = inEditTaskName.innerHTML;
-        let taskNameEditInput;
-        
-        
-        taskNameID = event.target.id;
-        
-        inEditTaskName.classList.add('hide');
-        
-        taskNameEditInput = document.getElementById(taskNameID + '-modify');
-        
-        taskNameEditInput.value = taskNameContent;
-        
-        taskNameEditInput.classList.remove('hide');
-        taskNameEditInput.focus();
-        
-        taskNameEditInput.addEventListener('keydown', function (e) {
-            //13 is the keycode for Enter
-            if (e.keyCode == 13) {
-                blurTaskName(e);
-            }
-        });
-        
-        taskNameEditInput.addEventListener('blur', blurTaskName);
-        isEditing = true;
-    }
-    
+	if (!isEditing) {
+		console.log("Something has been clicked in the DOM");
+		console.log(event);
+		
+		//get the content of the taskname
+		inEditTaskName = event.target;
+		
+		let taskNameContent = inEditTaskName.innerHTML;
+		let taskNameEditInput;
+		
+		
+		taskNameID = event.target.id;
+		
+		inEditTaskName.classList.add('hide');
+		
+		taskNameEditInput = document.getElementById(taskNameID + '-modify');
+		
+		taskNameEditInput.value = taskNameContent;
+		
+		taskNameEditInput.classList.remove('hide');
+		taskNameEditInput.focus();
+		
+		taskNameEditInput.addEventListener('keydown', function (e) {
+			//13 is the keycode for Enter
+			if (e.keyCode === 13) {
+				blurTaskName(e);
+			}
+		});
+		
+		taskNameEditInput.addEventListener('blur', blurTaskName);
+		isEditing = true;
+	}
+	
 }
 
 
 //stamps out the template for the new task panel
-export function createPanel(currentTask) {
-    
-    let newTaskParent = document.createElement('div');
-    
-    newTaskParent.id = `task-${currentTask.taskID}`;
-    
-    // newTaskParent.setAttribute('data-taskCount', currentTask.taskID);
-    
-    newTaskParent.classList.add('row', 'task-panel');
-    
-    document.querySelector('.task-holder').appendChild(newTaskParent);
-    
-    newTaskParent.innerHTML =
-        `<div id="task-name-${currentTask.taskID}">
-            <p class="task-title" id="task-${currentTask.taskID}-title"></p>
-            <input class="task-input-modify hide" id="task-${currentTask.taskID}-title-modify" type="text">
-            <p class="task-total" id="total-time-${currentTask.taskID}"></p>
-        </div>
-        <div id="times-${currentTask.taskID}">
-            <p class="times"></p>
-        </div>
-        <div id="delete-${currentTask.taskID}" data-task-count="${currentTask.taskID}">
-        delete this task
-        </div>`;
-    
-    let taskName = document.getElementById(`task-${currentTask.taskID}-title`);
-    let deleteTaskBtn = document.getElementById(`delete-${currentTask.taskID}`);
-    
-    deleteTaskBtn.addEventListener('click', TaskService.deleteTask);
-    taskName.addEventListener('click', clickedName);
+function createPanel(currentTask) {
+	
+	let newTaskParent = document.createElement('div');
+	
+	newTaskParent.id = `task-${currentTask.taskID}`;
+	
+	// newTaskParent.setAttribute('data-taskCount', currentTask.taskID);
+	
+	newTaskParent.classList.add('row', 'task-panel');
+	
+	document.querySelector('.task-holder').appendChild(newTaskParent);
+	
+	newTaskParent.innerHTML =
+		`<div id="task-name-${currentTask.taskID}">
+			<p class="task-title" id="task-${currentTask.taskID}-title"></p>
+			<input class="task-input-modify hide" id="task-${currentTask.taskID}-title-modify" type="text">
+			<p class="task-total" id="total-time-${currentTask.taskID}"></p>
+		</div>
+		<div id="times-${currentTask.taskID}">
+			<p class="times"></p>
+		</div>
+		<div id="delete-${currentTask.taskID}" data-task-count="${currentTask.taskID}">
+		delete this task
+		</div>`;
+	
+	let taskName = document.getElementById(`task-${currentTask.taskID}-title`);
+	let deleteTaskBtn = document.getElementById(`delete-${currentTask.taskID}`);
+	
+	deleteTaskBtn.addEventListener('click', TaskService.deleteTask);
+	taskName.addEventListener('click', clickedName);
+}
+
+
+export function displayTimes(currentTask) {
+	console.log('displayTimes(currentTask, taskCount)', currentTask, currentTask.taskID);
+	
+	//create the elements first because we reference them via ID
+	createPanel(currentTask);
+	
+	let taskNameSelector = document.querySelector(`#task-${currentTask.taskID}-title`);
+	let totalTimeSelector = document.querySelector(`#total-time-${currentTask.taskID}`);
+	let timesParagraph = document.querySelector(`#times-${currentTask.taskID} p`);
+	let totalHours = TimeMath.getHours(TaskService.TOTAL_END_MINUTES - TaskService.TOTAL_START_MINUTES);
+	let totalMinutes = TimeMath.getRemainingMinutes(TaskService.TOTAL_END_MINUTES - TaskService.TOTAL_START_MINUTES);
+	let startTime = `${currentTask.startTimes.hour}:${currentTask.startTimes.minutes}`;
+	let endTime = `${currentTask.endTimes.hour}:${currentTask.endTimes.minutes}`;
+	
+	console.log('totalHours: ', totalHours);
+	
+	if (totalHours < 1) {
+		totalHours = 0;
+	}
+	
+	console.log(currentTask.taskName);
+	taskNameSelector.innerHTML = `${currentTask.taskName}`;
+	totalTimeSelector.innerHTML = `Time: ${totalHours}.${totalMinutes}`;
+	
+	timesParagraph.innerHTML = `${startTime} - ${endTime}`;
+	
+	
+	currentTask.totalTimeSpentHours = totalHours;
+	currentTask.totalTimeSpentMinutes = totalMinutes;
+	
+	TaskService.updateTotalTime();
+	
 }
