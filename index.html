@@ -40,7 +40,7 @@
 	</div>
 	
 	<p id="error-message"></p>
-	<form id="time-form">
+	<form id="time-form" action="" method="">
 		<div class="row">
 			<label for="task-input">Enter name of task</label>
 			<input type="text"
@@ -71,8 +71,9 @@
 							<span class="input-group-addon" id="startTime-addon-minutes">
 								Minutes
 							</span>
-							<input type="text"
+							<input type="number"
 							       maxlength="2"
+							       max="59"
 							       class="form-control"
 							       id="start-time-minutes"
 							       placeholder="Minutes"
@@ -125,7 +126,7 @@
 		
 		
 		<div onclick="grabValues()">Enter Time</div>
-	</form>
+	<!--</form>-->
 	
 	<div class="task-holder">
 	</div>

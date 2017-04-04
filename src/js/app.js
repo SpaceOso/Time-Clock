@@ -5,13 +5,15 @@ import "../styles/styles.scss";
 
 function grabValues() {
 
+    console.log("grabValues()");
     Message.clear();
-    
+	
     let currentTask = Task.createTask();
     console.log(currentTask);
     if(currentTask !== false){
-        document.getElementById('task-input').blur();
-        document.getElementById('time-form').reset();
+	
+	    document.getElementById('time-form').reset();
+	    document.getElementById('task-input').blur();
         Task.displayTimes(currentTask);
     }
     
@@ -20,7 +22,7 @@ window.grabValues = grabValues;
 
 
 function setAmOrPm(timeFrame) {
-
+    console.log("setAmOrPm");
     let timeBody = document.getElementById(`${timeFrame}-body`);
     let timeBodyBtn = document.getElementById(`${timeFrame}-time-btn`);
     

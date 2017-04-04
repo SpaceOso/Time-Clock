@@ -36,6 +36,7 @@ function getAmOrPM() {
 }
 
 export function createTask() {
+	console.log("createTask()");
 	//TODO it would be nice if before returning the task we did all the necessary validation
 	
 	//returns an object with startTime and endTime AMPM values
@@ -49,11 +50,13 @@ export function createTask() {
 		taskName: TaskService.confirmTaskName(taskName),
 		taskID: 'id',
 		startTimes: {
+			id: 'start-body',
 			pm: startPM,
 			hour: +startTimeHourInput.value,
 			minutes: +startTimeMinuteInput.value,
 		},
 		endTimes: {
+			id: 'end-body',
 			pm: endPM,
 			hour: +endTimeHourInput.value,
 			minutes: +endTimeMinuteInput.value
@@ -66,7 +69,7 @@ export function createTask() {
 	if (TimeFields.validateTimeInputs(currentTask)) {
 		console.log('returning this task:', currentTask);
 		
-		if (TaskService.confirmInputs(currentTask)) {
+		if (TimeFields.confirmInputs(currentTask)) {
 			
 			currentTask.taskID = TaskService.createUniqueId();
 			
@@ -178,7 +181,15 @@ function createPanel(currentTask) {
 function setTimes(timeObject){
 
 	const {hour, minutes} = timeObject;
-
+	
+	if(hour === 24){
+		return `${hour - 12}:${minutes}am`;
+	}
+	
+	if(hour === 0){
+		return `${hour + 12}:${minutes}am`;
+	}
+	
 	return hour >= 13 ? `${hour - 12}:${minutes}pm` : `${hour}:${minutes}am`;
 
 }

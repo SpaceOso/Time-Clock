@@ -89,72 +89,7 @@ export function createUniqueId () {
     return (idStr);
 }
 
-export function confirmInputs(currentTask) {
 
-    //TODO need to throw error that times higher than 12 are not allowed for the hour
-    if(currentTask.startTimes.hour >= 13){
-        console.log("start times hour is higher than 12");
-        return false;
-    }
-    //TODO need to throw error that times higher than 12 are not allowed for the hour
-    if(currentTask.endTimes.hour >= 13){
-        console.log("end times hour is higher than 12");
-        return false;
-    }
-
-    //if the pm property is set to true then we need to convert it to military time
-    if (currentTask.startTimes.pm === true) {
-
-        if (currentTask.startTimes.hour <= 12) {
-            currentTask.startTimes.hour += 12;
-        }
-        
-    } else {
-        //checking for times under am setting
-        if(currentTask.startTimes.hour === 12){
-            //we are starting at midnight
-            currentTask.startTimes.hour = 0;
-        }
-    }
-    
-    if (currentTask.endTimes.pm === true) {
-
-        if (currentTask.endTimes.hour <= 12) {
-            currentTask.endTimes.hour += 12;
-        }
-    } else {
-        if(currentTask.endTimes.hour === 12){
-            currentTask.endTimes.hour = 24;
-        }
-    }
-
-
-    //convert hours to minutes
-    let startHourInMinutes = TimeMath.getMinutesFromHours(currentTask.startTimes.hour);
-    let endHourInMinutes = TimeMath.getMinutesFromHours(currentTask.endTimes.hour);
-    
-    TOTAL_START_MINUTES = startHourInMinutes + currentTask.startTimes.minutes;
-    TOTAL_END_MINUTES = endHourInMinutes + currentTask.endTimes.minutes;
-    
-    
-    if (TOTAL_START_MINUTES === TOTAL_END_MINUTES) {
-        Message.error(Message.errorText.sameTimes);
-        TimeFields.errorBothGroups(true);
-        return false;
-    }
-    
-    if(TOTAL_START_MINUTES >= TOTAL_END_MINUTES){
-        Message.error(Message.errorText.higherStartTime);
-        TimeFields.errorBothGroups(true);
-        return false;
-    }
-    
-    if (TOTAL_START_MINUTES < TOTAL_END_MINUTES) {
-        TimeFields.errorBothGroups(false);
-        return true;
-    }
-    
-}
 
 export function confirmTaskName(taskName){
     //we need to check if the user entered blank characters such as spaces or tabs
