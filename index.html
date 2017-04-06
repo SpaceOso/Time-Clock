@@ -61,11 +61,11 @@
 							<span class="input-group-btn" id="startTime-addon">
 								<button class="btn btn-default" type="button" id='start-time-btn' onclick="setAmOrPm('start')" value="am">Set PM</button>
 							</span>
-							<input type="text"
+							<input type="number"
 							       maxlength="2"
 							       class="form-control"
 							       id="start-time-hour"
-							       placeholder="Start Time Hour"
+							       placeholder="Hour"
 							       required
 							       name="start_time"/>
 							<span class="input-group-addon" id="startTime-addon-minutes">
@@ -76,7 +76,7 @@
 							       max="59"
 							       class="form-control"
 							       id="start-time-minutes"
-							       placeholder="Minutes"
+							       placeholder="Minutes 00"
 							       name="start-time-minutes"
 							       required/>
 						</div>
@@ -95,14 +95,14 @@
 							<span class="input-group-btn" id="endTime-addon">
 								<button class="btn btn-default" type="button" id='end-time-btn' onclick="setAmOrPm('end')" value="am">Set PM</button>
 							</span>
-							<input type="text"
+							<input type="number"
 							       maxlength="2"
 							       id="end-time-hour"
 							       class="form-control"
-							       placeholder="End Time"
+							       placeholder="Hour"
 							       required/>
 							<span class="input-group-addon" id="end-time-minutes-addon">End Time Minutes</span>
-							<input type="text"
+							<input type="number"
 							       maxlength="2"
 							       minlength="2"
 							       min="00"
@@ -110,7 +110,7 @@
 							       id="end-time-minutes"
 							       class="form-control"
 							       required
-							       placeholder="End Minutes"/>
+							       placeholder="Minutes 00"/>
 						</div>
 					</div>
 				</div>

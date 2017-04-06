@@ -11,12 +11,21 @@ export const errorText = {
     startTimeInvalid: "Please enter a valid number for the start time",
     hourInvalid: "Please enter a valid number for the hour",
     minutesInvalid: "Please enter a valid number for the minute input",
+    minutesDoubleDigits: "Please enter a double digit number for minutes",
     endTimeInvalid: "Please enter a valid number for the end time",
-    sameTimes: "Times can't be the same."
+    sameTimes: "Times can't be the same.",
+	enterTimes: "Please enter times to begin"
 };
 
 export function throwError(objectToError, addClass, errorMessage) {
     console.log(objectToError);
+    
+    if(objectToError === 'both'){
+    	throwError('start-body', addClass, errorMessage);
+    	throwError('end-body', addClass, errorMessage );
+    	return true;
+    }
+    
 	let objToError = document.getElementById(objectToError);
 	
     if (addClass) {

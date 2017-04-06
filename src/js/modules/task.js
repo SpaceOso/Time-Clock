@@ -46,25 +46,28 @@ export function createTask() {
 	let taskName = taskNameInput.value;
 	
 	
+	
 	let currentTask = {
 		taskName: TaskService.confirmTaskName(taskName),
 		taskID: 'id',
 		startTimes: {
 			id: 'start-body',
 			pm: startPM,
-			hour: +startTimeHourInput.value,
-			minutes: +startTimeMinuteInput.value,
+			hour: startTimeHourInput.value,
+			minutes: startTimeMinuteInput.value,
 		},
 		endTimes: {
 			id: 'end-body',
 			pm: endPM,
-			hour: +endTimeHourInput.value,
-			minutes: +endTimeMinuteInput.value
+			hour: endTimeHourInput.value,
+			minutes: endTimeMinuteInput.value
 		},
 		totalTimeSpentHours: 0,
 		totalTimeSpentMinutes: 0
 	};
 	
+	
+	console.log("init task:", currentTask)
 	
 	if (TimeFields.validateTimeInputs(currentTask)) {
 		console.log('returning this task:', currentTask);
@@ -188,6 +191,10 @@ function setTimes(timeObject){
 	
 	if(hour === 0){
 		return `${hour + 12}:${minutes}am`;
+	}
+	
+	if(hour === 12){
+		return `${hour}:${minutes}pm`
 	}
 	
 	return hour >= 13 ? `${hour - 12}:${minutes}pm` : `${hour}:${minutes}am`;

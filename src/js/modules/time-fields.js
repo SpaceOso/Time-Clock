@@ -19,8 +19,6 @@ function checkTimeLimits(timeGroup){
 		Message.throwError(timeGroup.id, true, Message.errorText.hourTooHigh );
 		console.log('hour too high');
 		timeLimitsValidated = false;
-	} else {
-		Message.throwError(timeGroup.id, false, '');
 	}
 	
 	if(minutes > 59 ){
@@ -28,9 +26,7 @@ function checkTimeLimits(timeGroup){
 	    Message.throwError(timeGroup.id, true, Message.errorText.minutesTooHigh);
 	    console.log('minutes too high');
 	    timeLimitsValidated = false;
-    } else {
-		Message.throwError(timeGroup.id, false, '');
-	}
+    }
 	
 	return timeLimitsValidated;
 }
@@ -44,13 +40,22 @@ function checkForNumber(timeGroup) {
 	
 	let numbersValidated = true;
 	
-	if(hour.toString().match(reg) === null){
+	console.log('minutes before string:', minutes);
+	console.log("minutes to string:", minutes.toString());
+	
+	if(minutes.length < 2){
+		console.log(`${id} minutes are less than 2`);
+		Message.throwError(id, true, Message.errorText.minutesDoubleDigits);
+		numbersValidated = false;
+	}
+	
+	if(hour.match(reg) === null){
 		console.log(`${id} hour matched`);
 		Message.throwError(id, true, Message.errorText.hourInvalid);
 		numbersValidated = false;
 	}
 	
-	if(minutes.toString().match(reg) === null){
+	if(minutes.match(reg) === null){
 		console.log(`${id} minutes matched`);
 		Message.throwError(id, true, Message.errorText.minutesInvalid);
 		numbersValidated = false;
@@ -69,7 +74,12 @@ function checkInputGroups(currentTask) {
 	let startGroupChecked = false;
 	let endGroupChecked = false;
 	
-    if(startTimes.hour != 0 || endTimes.hour != 0 ){
+	if(startTimes.hour.length === 0 && startTimes.minutes.length === 0 && endTimes.hour.length === 0 && endTimes.minutes.length === 0){
+		Message.throwError("both", true, Message.errorText.enterTimes);
+		return false;
+	}
+	
+    if(startTimes.hour.length !== 0 || endTimes.hour.length !== 0 ){
     	
     	if(!checkForNumber(startTimes)){
     		console.log("start times is not set correctly");
@@ -79,10 +89,7 @@ function checkInputGroups(currentTask) {
 		    Message.throwError(startTimes.id, false, "");
 	    }
 	    
-	    if(!checkForNumber(endTimes)){
-    		console.log("end times is not set correctly");
-    		Message.throwError(endTimes.id, true, Message.errorText.endTimeInvalid);
-	    } else {
+	    if(checkForNumber(endTimes)){
 	    	endGroupChecked = true;
 	    	Message.throwError(endTimes.id, false, "");
 	    }
@@ -187,7 +194,7 @@ export function confirmInputs(currentTask) {
 	
 	if (currentTask.endTimes.pm === true) {
 		
-		if (currentTask.endTimes.hour <= 12) {
+		if (currentTask.endTimes.hour <= 11) {
 			currentTask.endTimes.hour += 12;
 		}
 	} else {
@@ -204,8 +211,8 @@ export function confirmInputs(currentTask) {
 	console.log("startHourInMinutes", startHourInMinutes);
 	console.log("endHourINminutes", endHourInMinutes);
 	
-	TaskService.TOTAL_START_MINUTES = startHourInMinutes + currentTask.startTimes.minutes;
-	TaskService.TOTAL_END_MINUTES = endHourInMinutes + currentTask.endTimes.minutes;
+	TaskService.TOTAL_START_MINUTES = startHourInMinutes + +currentTask.startTimes.minutes;
+	TaskService.TOTAL_END_MINUTES = endHourInMinutes + +currentTask.endTimes.minutes;
 	
 	console.log('total start', TaskService.TOTAL_START_MINUTES);
 	console.log('total end', TaskService.TOTAL_END_MINUTES);
@@ -219,12 +226,10 @@ export function confirmInputs(currentTask) {
 	
 	if(TaskService.TOTAL_START_MINUTES >= TaskService.TOTAL_END_MINUTES){
 		Message.throwError(startGroup, true, Message.errorText.higherStartTime);
-		// Message.error(Message.errorText.higherStartTime);
 		return false;
 	}
 	
 	if (TaskService.TOTAL_START_MINUTES < TaskService.TOTAL_END_MINUTES) {
-		// errorBothGroups(false);
 		return true;
 	}
 	
