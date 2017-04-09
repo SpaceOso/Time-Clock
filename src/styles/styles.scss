@@ -1,8 +1,80 @@
 @import "boilerplate";
+@import "variables";
+
+
+html{
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  background-repeat:no-repeat;
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#244484+0,a6fffe+100 */
+  background: #244484; /* Old browsers */
+  background: -moz-linear-gradient(top, #244484 0%, #a6fffe 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #244484 0%,#a6fffe 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #244484 0%,#a6fffe 100%) fixed; /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#244484', endColorstr='#a6fffe',GradientType=0 ); /* IE6-9 */
+  height: 100%;
+  color: $mainFont;
+
+}
+
+body{
+  font-family: 'Orbitron', sans-serif;
+  background-color: inherit;
+  color: $mainFont;
+  text-align: center;
+  font-size: 62.5% !important;
+}
+
+.container{
+  color: $mainFont;
+  font-size: 1.6em;
+}
+
+#task-name-container{
+  min-height: 90px;
+  max-width: 630px;
+  color: $mainFont;
+  text-align: left;
+  margin: auto;
+  padding: 20px;
+  border-radius: 10px;
+
+  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#92a0ce+0,a8a8a8+100 */
+  background: #92a0ce; /* Old browsers */
+  background: -moz-linear-gradient(top, #92a0ce 0%, #a8a8a8 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #92a0ce 0%,#a8a8a8 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #92a0ce 0%,#a8a8a8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#92a0ce', endColorstr='#a8a8a8',GradientType=0 ); /* IE6-9 */
+  border: 3px solid $mainFont;
+
+  label{
+    font-weight: inherit;
+  }
+}
+
+::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  color: $inputFont !important;
+  font-weight: bold;
+}
+::-moz-placeholder { /* Firefox 19+ */
+  color: $inputFont !important;
+  font-weight: bold;
+}
+:-ms-input-placeholder { /* IE 10+ */
+  color: $inputFont !important;
+  font-weight: bold;
+}
+:-moz-placeholder { /* Firefox 18- */
+  color: $inputFont !important;
+  font-weight: bold;
+}
 
 .title{
   width: 100%;
   text-align: center;
+  color: $mainFont;
 }
 
 .title h1{
