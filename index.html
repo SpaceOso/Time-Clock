@@ -11,12 +11,12 @@
 	<!-- Place favicon.ico in the root directory -->
 	
 	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-	      integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"-->
+	<!--integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">-->
 	
 	<!-- Optional theme -->
 	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"-->
-	      <!--integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+	<!--integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
 	
 	<script src="./src/js/vendor/modernizr-2.8.3.min.js"></script>
 </head>
@@ -28,97 +28,70 @@
 
 
 <div class="container">
-	<div class="row">
-		<div class="title">
-			<p>Time-Clock</p>
-			<p>A simple app to keep track of your daily hours</p>
-		</div>
 	
+	<div class="title">
+		<p>Time-Clock</p>
+		<p>A simple app to keep track of your daily hours</p>
 	</div>
 	
+	
 	<p id="error-message"></p>
+	
 	<form id="time-form" action="" method="">
-		<div class="row" id="task-name-container">
-			<label for="task-input">Task Name</label>
+		<div id="task-name-container">
+			<label for="task-input" class="block">Task Name</label>
 			<input type="text"
 			       class="form-control"
 			       id="task-input"
-			       placeholder="Enter a name for your task"
+			       placeholder="Task Name"
 			       name="task-name"
 			       required
 			>
 		</div>
 		
-		<div class="row">
-			<div class="col-lg-6">
-				<p>Start Time</p>
-				<div class="panel panel-default">
-					<div class="panel-body day-time" id="start-body">
-						<div class="input-group" id="start-time-group">
-							<span class="input-group-btn" id="startTime-addon">
-								<button class="btn btn-default" type="button" id='start-time-btn' onclick="setAmOrPm('start')" value="am">Set PM</button>
-							</span>
-							<input type="number"
-							       maxlength="2"
-							       class="form-control"
-							       id="start-time-hour"
-							       placeholder="Hour"
-							       required
-							       name="start_time"/>
-							<span class="input-group-addon" id="startTime-addon-minutes">
-								Minutes
-							</span>
-							<input type="number"
-							       maxlength="2"
-							       max="59"
-							       class="form-control"
-							       id="start-time-minutes"
-							       placeholder="Minutes 00"
-							       name="start-time-minutes"
-							       required/>
-						</div>
-					</div>
+		<div class="time-input am-time" id="start-body">
+			
+			<div class="time-flex">
+				<div class="time-set">
+					<label for="start-am"><input id="start-am" type="radio" name="start-time" value="start-am" checked>AM</label>
+					<label for="start-pm"><input id="start-pm" type="radio" name="start-time" value="start-pm" >PM</label>
+					
 				</div>
-			
-			</div>
-			
-			<div class="col-lg-6">
-				<p>
-					End Time
-				</p>
-				<div class="panel panel-default">
-					<div class="panel-body day-time" id="end-body">
-						<div class="input-group" id="end-time-group">
-							<span class="input-group-btn" id="endTime-addon">
-								<button class="btn btn-default" type="button" id='end-time-btn' onclick="setAmOrPm('end')" value="am">Set PM</button>
-							</span>
-							<input type="number"
-							       maxlength="2"
-							       id="end-time-hour"
-							       class="form-control"
-							       placeholder="Hour"
-							       required/>
-							<span class="input-group-addon" id="end-time-minutes-addon">End Time Minutes</span>
-							<input type="number"
-							       maxlength="2"
-							       minlength="2"
-							       min="00"
-							       max="59"
-							       id="end-time-minutes"
-							       class="form-control"
-							       required
-							       placeholder="Minutes 00"/>
-						</div>
-					</div>
+				
+				<div class="time-input-group">
+					<label for="start-time">Start Time</label>
+					<input type="text"
+					       id="start-time"
+					       placeholder="hour : minutes"
+					       required
+					>
 				</div>
-			
 			</div>
+		
 		</div>
 		
-		<div class="row">
-			<div id="total-time-parent">
-				<p id="total-time"></p>
+		<div class="time-input pm-time" id="end-body">
+			<div class="time-flex">
+				<div class="time-set">
+					<label for="end-am"> <input id="end-am" type="radio" name="end-time" value="end-am" checked> AM</label>
+					
+					<label for="end-pm"><input id="end-pm" type="radio" name="end-time" value="end-pm" > PM </label>
+					
+				</div>
+				
+				<div class="time-input-group">
+					<label for="end-time">End Time</label>
+					<input type="text"
+					       placeholder="hour : minutes"
+					       id="end-time">
+				</div>
 			</div>
+		
+		</div>
+		
+		
+		<div id="total-time-parent">
+			<p id="total-time"></p>
 		</div>
 		
 		
@@ -131,15 +104,14 @@
 </div>
 
 
-
 <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
 <!-- Include all compiled plugins (below), or include individual files as needed -->
 
 <!-- Latest compiled and minified JavaScript -->
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
-        integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-        crossorigin="anonymous"></script>
+<!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"-->
+<!--integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"-->
+<!--crossorigin="anonymous"></script>-->
 
 <script src="dist/bundle.js"></script>
 
