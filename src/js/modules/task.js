@@ -14,24 +14,88 @@ let isEditing = false;
 
 //inputs
 const taskNameInput = document.getElementById('task-input');
+const startTimeInput = document.getElementById('start-time');
+const endTimeInput = document.getElementById('end-time');
+let startHourFormated = false;
+let startMinsFormated = false;
+
 const startTimeHourInput = document.getElementById('start-time-hour');
 const startTimeMinuteInput = document.getElementById('start-time-minutes');
 const endTimeHourInput = document.getElementById('end-time-hour');
 const endTimeMinuteInput = document.getElementById('end-time-minutes');
 
 
-//buttons
-const startTimeFrameBtn = document.getElementById('start-time-btn');
-const endTimeFrameBtn = document.getElementById('end-time-btn');
+//time radio buttons
+const startTimeZones = document.getElementById('start-time');
+const endTimeZones = document.getElementById('end-time');
 
 //will hold the current editing value
 let inEditTaskName;
+let deleteColon = false;
+
+startTimeZones.addEventListener("keyup", function (event) {
+	
+	console.log(event.target.value.length);
+	if(event.key !== "Backspace" ){
+		
+		if(event.target.value.length >= 2 && startHourFormated === false){
+			console.log("should not be here after colon");
+			let hour = event.target.value.substr(0 , 2);
+			event.target.value = `${hour} : `;
+			startHourFormated = true;
+			console.log("second formated", startHourFormated);
+		}
+		
+		if(event.target.value.length >= 5 && startMinsFormated === false){
+			let minutes = event.target.value.substr(5, 6);
+			console.log(minutes);
+		}
+		
+	}
+	
+	if(event.key === "Backspace"){
+		if(event.target.value.endsWith(" : ")){
+			console.log("you can delete three now");
+			deleteColon = true;
+		}
+		
+		if(deleteColon === true){
+			event.target.value = event.target.value.substr(0, 2);
+			deleteColon = false;
+			startHourFormated = false;
+		}
+	}
+	
+	
+});
+
 
 
 function getAmOrPM() {
+	
+	let startPM = false;
+	let endPM = false;
+	
+	
+	startTimeZones.forEach( el => {
+		// console.log(el);
+		if(el.checked && el.id === "start-pm"){
+			console.log(el.id);
+			startPM = true;
+		}
+	});
+	
+	endTimeZones.forEach( el => {
+		if(el.checked && el.id === "end-pm"){
+			console.log(el);
+			endPM = true;
+		}
+	});
+	
+	
 	return {
-		startPM: startTimeFrameBtn.value === 'pm',
-		endPM: endTimeFrameBtn.value === 'pm'
+		startPM: startPM,
+		endPM: endPM
 	};
 }
 
