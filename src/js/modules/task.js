@@ -17,17 +17,9 @@ const taskNameInput = document.getElementById('task-input');
 const startTimeInput = document.getElementById('start-time');
 const endTimeInput = document.getElementById('end-time');
 
-let startHourFormated = false;
-let startMinsFormated = false;
-
-let endHourFormated = false;
-let endMinsFormated = false;
-
-const startTimeHourInput = document.getElementById('start-time-hour');
-const startTimeMinuteInput = document.getElementById('start-time-minutes');
-const endTimeHourInput = document.getElementById('end-time-hour');
-const endTimeMinuteInput = document.getElementById('end-time-minutes');
-
+//time values
+let startTimeValues;
+let endTimeValues;
 
 //time radio buttons
 const startTimeZones = document.getElementsByName('start-time-frame');
@@ -37,85 +29,46 @@ const endTimeZones = document.getElementsByName('end-time-frame');
 let inEditTaskName;
 let deleteColon = false;
 
-function formatHourTime(timeStr) {
-    console.log("formatHourTime with:", timeStr);
-    //this function needs to take in the string
-    /*So the purpose of this functin is going to be to take in a
-     * string and then do all the formatting in here. This way
-     * we can use this function for either of the start or end inputs*/
+function formatTimeInput(timeStr, timeGroup) {
 
+	//TODO need to make a function to check that its only digits that we're passing
     let hour = timeStr.substr(0, 2);
-
-    return `${hour} : `;
-
+    let minutes = timeStr.substr(2);
+    console.log("hour:", hour, "minutes", minutes);
+	
+    if(timeGroup === "start"){
+    	startTimeValues = {hour: hour, minutes: minutes};
+    }
+    
+    if(timeGroup === "end"){
+    	endTimeValues = {hour: hour, minutes: minutes};
+    }
+    
+    return `${hour} : ${minutes}`;
 }
-
-//need to create a function that checks if there is input is length of 2
-//add the colon
-//also need to check that if the user hits backspace it does the appropriate things
 
 
 //TODO need to create the following for the end-time input as well
+//this was changed from blur to keyup, I think it works better this way
 startTimeInput.addEventListener("keyup", function (event) {
 
-    //TODO need to check if the user is inputing something else besides numbers
-
-    if (event.key !== "Backspace") {
-
-        let currentTimeStr = event.target.value;
-        console.log("currentTimeStr", currentTimeStr);
-
-        if (currentTimeStr.length >= 2) {
-            console.log("sending:", event.target.value);
-            event.target.value = formatHourTime(currentTimeStr);
-            console.log(formatHourTime(currentTimeStr));
-        }
-
-        /*
-         if(event.target.value.length >= 2 && startHourFormated === false){
-         console.log("should not be here after colon");
-         let hour = event.target.value.substr(0 , 2);
-         event.target.value = `${hour} : `;
-         startHourFormated = true;
-         console.log("second formated", startHourFormated);
-         }
-         */
-
-        if (event.target.value.length >= 5 && startMinsFormated === false) {
-            let minutes = event.target.value.substr(5, 6);
-            console.log(minutes);
-        }
-
-    }
-
-    if (event.key === "Backspace") {
-        if (event.target.value.endsWith(" : ")) {
-            console.log("you can delete three now");
-            deleteColon = true;
-        }
-
-        if (deleteColon === true) {
-            event.target.value = event.target.value.substr(0, 2);
-            deleteColon = false;
-            startHourFormated = false;
-        }
-    }
-
-
+	if(event.target.value.length === 4){
+		event.target.value = formatTimeInput(event.target.value, "start");
+	} else {
+		//TODO need to throw error here saying to input 4 digits for time 00:00
+		//TODO if we're going to go with keyup this error statement needs to be above
+		console.log("Error: Not valid start time");
+	}
 });
 
 endTimeInput.addEventListener("keyup", function (event) {
-
-    if(event.key !== "Backspace"){
-        let currentTimeStr = event.target.value;
-        console.log("currentTimeStr", currentTimeStr);
-
-        if (currentTimeStr.length >= 2) {
-            console.log("sending:", event.target.value);
-            event.target.value = formatHourTime(currentTimeStr);
-            console.log(formatHourTime(currentTimeStr));
-        }
-    }
+	
+	if(event.target.value.length === 4){
+		event.target.value = formatTimeInput(event.target.value, "end");
+	} else {
+		//TODO need to throw error here saying to input 4 digits for time 00:00
+		console.log("Error: Not valid start time");
+	}
 });
 
 function getAmOrPM() {
@@ -163,21 +116,21 @@ export function createTask() {
         startTimes: {
             id: 'start-body',
             pm: startPM,
-            hour: startTimeHourInput.value,
-            minutes: startTimeMinuteInput.value,
+            hour: startTimeValues.hour,
+            minutes: startTimeValues.minutes
         },
         endTimes: {
             id: 'end-body',
             pm: endPM,
-            hour: endTimeHourInput.value,
-            minutes: endTimeMinuteInput.value
+            hour: endTimeValues.hour,
+            minutes: endTimeValues.minutes
         },
         totalTimeSpentHours: 0,
         totalTimeSpentMinutes: 0
     };
 
 
-    console.log("init task:", currentTask)
+    console.log("init task:", currentTask);
 
     if (TimeFields.validateTimeInputs(currentTask)) {
         console.log('returning this task:', currentTask);
