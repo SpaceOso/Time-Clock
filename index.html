@@ -34,70 +34,79 @@
 		<p>A simple app to keep track of your daily hours</p>
 	</div>
 	
-	
-	<p id="error-message"></p>
-	
-	<form id="time-form" action="" method="">
-		<div id="task-name-container">
-			<label for="task-input" class="block">Task Name</label>
-			<input type="text"
-			       class="form-control"
-			       id="task-input"
-			       placeholder="Task Name"
-			       name="task-name"
-			       required
-			>
-		</div>
+	<div id="content-container">
 		
-		<div class="time-input am-time" id="start-body">
+		<form id="time-form" action="" method="">
+			<div id="task-name-container">
+				<label for="task-input" class="block">Task Name</label>
+				<input type="text"
+				       class="form-control"
+				       id="task-input"
+				       placeholder="Task Name"
+				       name="task-name"
+				       required
+				>
+			</div>
 			
-			<div class="time-flex">
-				<div class="time-set">
-					<label for="start-am"><input id="start-am" type="radio" name="start-time-frame" value="start-am" checked>AM</label>
-					<label for="start-pm"><input id="start-pm" type="radio" name="start-time-frame" value="start-pm" >PM</label>
-					
-				</div>
+			<div class="time-input am-time" id="start-body">
 				
-				<div class="time-input-group">
-					<label for="start-time">Start Time</label>
-					<input type="text"
-					       id="start-time"
-					       maxlength="4"
-					       placeholder="hour : minutes"
-					       required
-					>
-				</div>
-			</div>
-		
-		</div>
-		
-		<div class="time-input pm-time" id="end-body">
-			<div class="time-flex">
-				<div class="time-set">
-					<label for="end-am"> <input id="end-am" type="radio" name="end-time-frame" value="end-am" checked> AM</label>
-					<label for="end-pm"><input id="end-pm" type="radio" name="end-time-frame" value="end-pm" > PM </label>
+				<div class="time-flex">
+					<div class="time-set">
+						<label for="start-am">
+							<input id="start-am" type="radio" name="start-time-frame" value="start-am" checked>
+							AM
+						</label>
+						<label for="start-pm">
+							<input id="start-pm" type="radio" name="start-time-frame" value="start-pm">
+							PM
+						</label>
 					
+					</div>
+					
+					<div class="time-input-group">
+						<label for="start-time">Start Time</label>
+						<input type="text"
+						       id="start-time"
+						       maxlength="4"
+						       placeholder="hour : minutes"
+						       required
+						>
+					</div>
 				</div>
-				
-				<div class="time-input-group">
-					<label for="end-time">End Time</label>
-					<input type="text"
-					       maxlength="4"
-					       placeholder="hour : minutes"
-					       id="end-time">
-				</div>
+			
 			</div>
+			
+			<div class="time-input pm-time" id="end-body">
+				<div class="time-flex">
+					<div class="time-set">
+						<label for="end-am"> <input id="end-am" type="radio" name="end-time-frame" value="end-am" checked> AM</label>
+						<label for="end-pm"><input id="end-pm" type="radio" name="end-time-frame" value="end-pm"> PM</label>
+					</div>
+					
+					<div class="time-input-group">
+						<label for="end-time">End Time</label>
+						<input type="text"
+						       maxlength="4"
+						       placeholder="hour : minutes"
+						       id="end-time">
+					</div>
+				</div>
+			
+			</div>
+			
+			<div id="error-container">
+				<p id="error-message">Error: This is a test error message.</p>
+			</div>
+			
+			<div id="total-time-parent">
+				<p id="total-time"></p>
+			</div>
+			
+			
+			<div onclick="grabValues()">Enter Time</div>
+		</form>
 		
-		</div>
-		
-		
-		<div id="total-time-parent">
-			<p id="total-time"></p>
-		</div>
-		
-		
-		<div onclick="grabValues()">Enter Time</div>
-	</form>
+	</div>
 	
 	<div class="task-holder">
 	</div>

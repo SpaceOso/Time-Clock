@@ -1,5 +1,6 @@
 @import "boilerplate";
 @import "variables";
+@import "./modules/error-message";
 
 * {
   box-sizing: border-box;
@@ -238,4 +239,10 @@ input{
   background: -webkit-linear-gradient(top, #aa4db1 0%,#6293ff 100%); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(to bottom, #aa4db1 0%,#6293ff 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#aa4db1', endColorstr='#6293ff',GradientType=0 ); /* IE6-9 */
+}
+
+#content-container{
+  max-width: 700px;
+  margin: auto;
+  text-align: center;
 }

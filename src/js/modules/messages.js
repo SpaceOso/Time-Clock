@@ -1,6 +1,6 @@
 
 //error message holder
-const errorParent = document.getElementById('error-message');
+const errorParent = document.getElementById('error-container');
 
 export const errorText = {
     notANumber: "Please inter a valid integer.",
@@ -37,6 +37,8 @@ export function throwError(objectToError, addClass, errorMessage) {
 }
 
 export function error(errorMessage) {
+	//TODO need to append p tags instead of just changing the inner text this way
+	//TODO this way we can add multiple error messages
     errorParent.innerHTML = errorMessage;
 }
 

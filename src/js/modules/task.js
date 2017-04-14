@@ -101,15 +101,13 @@ function getAmOrPM() {
 
 export function createTask() {
     console.log("createTask()");
-    //TODO it would be nice if before returning the task we did all the necessary validation
-
+	
     //returns an object with startTime and endTime AMPM values
     let {startPM, endPM} = getAmOrPM();
-
-
+	
     let taskName = taskNameInput.value;
-
-
+	
+    //TODO it would be nice if this shit would work
     let currentTask = {
         taskName: TaskService.confirmTaskName(taskName),
         taskID: 'id',
