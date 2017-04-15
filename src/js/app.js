@@ -6,7 +6,7 @@ import "../styles/styles.scss";
 function grabValues() {
 
     console.log("grabValues()");
-    Message.clear();
+    // Message.clear();
 	
     let currentTask = Task.createTask();
     console.log(currentTask);
