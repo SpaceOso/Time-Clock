@@ -40,8 +40,8 @@ function checkForNumber(timeGroup) {
 	
 	let numbersValidated = true;
 	
-	console.log('minutes before string:', minutes);
-	console.log("minutes to string:", minutes.toString());
+	// console.log('minutes before string:', minutes);
+	// console.log("minutes to string:", minutes.toString());
 	
 	if(minutes.length < 2){
 		console.log(`${id} minutes are less than 2`);
@@ -73,12 +73,15 @@ function checkInputGroups(currentTask) {
 	//will evaluate to true if each group is confirmed
 	let startGroupChecked = false;
 	let endGroupChecked = false;
-	
+
+	//making sure that the inputs are not empty
 	if(startTimes.hour.length === 0 && startTimes.minutes.length === 0 && endTimes.hour.length === 0 && endTimes.minutes.length === 0){
+		console.log("we're in here because something or all are 0");
 		Message.throwError("both", true, Message.errorText.enterTimes);
 		return false;
 	}
-	
+
+	//now we check to see if the values are actual numbers
     if(startTimes.hour.length !== 0 || endTimes.hour.length !== 0 ){
     	
     	if(!checkForNumber(startTimes)){
@@ -112,7 +115,7 @@ function checkInputGroups(currentTask) {
 
 }
 
-
+//TODO this can be refactored, this is just a middle man
 //will check that inputs are numbers
 export function validateTimeInputs(currentTask) {
    console.log("validateTimeInputs");
