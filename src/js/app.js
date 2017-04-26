@@ -32,10 +32,25 @@ function grabValues() {
 }
 window.grabValues = grabValues;
 
-function colorChange(timePeriod) {
-	console.log("colorChange()");
-	let goalColor = amStartColor;
-	let endGoalColor = amEndColor;
+function colorChange(timePeriod, AmPm) {
+	console.log("colorChange()", timePeriod);
+	
+	let goalColor, endGoalColor;
+	
+	
+	if(AmPm === "am"){
+		goalColor = amEndColor;
+		endGoalColor = amStartColor;
+	}
+	
+	if(AmPm === "pm"){
+		goalColor = pmStartColor;
+		endGoalColor = pmEndColor;
+	}
+	
+	
+	// let goalColor = amStartColor;
+	// let endGoalColor = amEndColor;
 	let timeBody = document.getElementById(`${timePeriod}-body`);
 	
 	let r1 = 0;
@@ -46,32 +61,44 @@ function colorChange(timePeriod) {
 	let g2 = 0;
 	let b2 = 0;
 	
+	let startColor = [255,255,255];
+	let endColor = [255,255,255];
 	
 	
 	function increaseColor() {
-		if(r1 < goalColor[0]) {
-			r1 += 1;
-		}
+		let r1, g1, b1, r2, g2, b2;
+		let startFinished = true;
+		let endFinished = true;
 		
-		if(g1 < goalColor[1]){
-			g1 += 1;
-		}
+		startColor = startColor.map((x, i) =>{
+			if(x < goalColor[i]){
+				x += 1;
+				startFinished = false;
+			} else if (x > goalColor[i]){
+				x -= 1;
+				startFinished = false;
+			}
+			return x;
+		});
 		
-		if(b1 < goalColor[2]){
-			b1 += 1;
-		}
+		endColor = endColor.map((x, i) =>{
+			if( x < endGoalColor[i]){
+				x += 1;
+				endFinished = false;
+			} else if (x > endGoalColor[i]){
+				x -= 1;
+				endFinished = false;
+			}
+			return x;
+		});
 		
-		if(r2 < endGoalColor[0]) {
-			r2 += 1;
-		}
 		
-		if(g2 < endGoalColor[1]){
-			g2 += 1;
-		}
 		
-		if(b2 < endGoalColor[2]){
-			b2 += 1;
-		}
+		
+		[r1, g1, b1] = startColor;
+		[r2, g2, b2] = endColor;
+		// console.log("firstColors", r1, g1, b1);
+		
 		let newStartColor = `${r1}, ${g1}, ${b1}`;
 		let newEndColor = `${r2}, ${g2}, ${b2}`;
 		console.log(newStartColor);
@@ -79,9 +106,13 @@ function colorChange(timePeriod) {
 		timeBody.style.background = `-webkit-linear-gradient(top, rgb(${newStartColor}) 0%,rgb(${newEndColor}) 100%)`;
 		timeBody.style.background = `-moz-linear-gradient(top, rgb(${newStartColor}) 0%, rgb(${newEndColor}) 100%)`;
 		
+		if(startFinished && endFinished){
+			clearInterval(colorIntervalTimer);
+		}
+		
 	}
 	
-	setInterval(increaseColor);
+	let colorIntervalTimer = setInterval(increaseColor);
 }
 
 //TODO need to make this animate the color changes
@@ -98,14 +129,14 @@ function increaseColor(timeFrame, currentTimePeriod) {
 		// timeBody.style.background = `-webkit-linear-gradient(top, rgb(${newStartColor}) 0%,rgb(${newEndColor}) 100%)`;
 		// timeBody.style.background = `-moz-linear-gradient(top, rgb(${newStartColor}) 0%, rgb(${newEndColor}) 100%)`;
 		// setInterval(colorChange);
-		colorChange(timeFrame);
+		colorChange(timeFrame, "am");
 	}
 	
 	if (currentTimePeriod === "pm") {
 		console.log("we're switching to am");
 		// timeBody.classList.remove("am-time");
 		// timeBody.classList.add("pm-time");
-		colorChange(timeFrame);
+		colorChange(timeFrame, "pm");
 	}
 	
 }
