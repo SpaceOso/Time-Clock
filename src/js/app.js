@@ -32,44 +32,42 @@ function grabValues() {
 }
 window.grabValues = grabValues;
 
+//TODO need to find a way to send current color info so when we colorchange to an error we can color change back to normal
 function colorChange(timePeriod, AmPm) {
 	console.log("colorChange()", timePeriod);
 	
 	let goalColor, endGoalColor;
+    let startColor, endColor;
 	
 	
 	if(AmPm === "am"){
 		goalColor = amEndColor;
 		endGoalColor = amStartColor;
+		startColor = [90, 147, 255];
+		endColor = [170, 77, 177];
 	}
 	
 	if(AmPm === "pm"){
 		goalColor = pmStartColor;
 		endGoalColor = pmEndColor;
+		startColor = [255, 219, 151];
+		endColor = [252, 0, 151];
 	}
 	
 	
-	// let goalColor = amStartColor;
-	// let endGoalColor = amEndColor;
 	let timeBody = document.getElementById(`${timePeriod}-body`);
-	
-	let r1 = 0;
-	let g1 = 0;
-	let b1 = 0;
-	
-	let r2 = 0;
-	let g2 = 0;
-	let b2 = 0;
-	
-	let startColor = [255,255,255];
-	let endColor = [255,255,255];
-	
-	
+
+
 	function increaseColor() {
-		let r1, g1, b1, r2, g2, b2;
+	    //will turn false if we hav eto increase the color values
 		let startFinished = true;
 		let endFinished = true;
-		
+
+		//these will hold the rgb(#,#,#) value
+        let startColorString = "";
+        let endColorString = "";
+
+		//TODO need to refactor this so we're not mapping back to back. Will also need to be able to change to an error
 		startColor = startColor.map((x, i) =>{
 			if(x < goalColor[i]){
 				x += 1;
@@ -92,20 +90,26 @@ function colorChange(timePeriod, AmPm) {
 			return x;
 		});
 		
-		
-		
-		
-		[r1, g1, b1] = startColor;
-		[r2, g2, b2] = endColor;
-		// console.log("firstColors", r1, g1, b1);
-		
-		let newStartColor = `${r1}, ${g1}, ${b1}`;
-		let newEndColor = `${r2}, ${g2}, ${b2}`;
-		console.log(newStartColor);
-		console.log(newEndColor);
-		timeBody.style.background = `-webkit-linear-gradient(top, rgb(${newStartColor}) 0%,rgb(${newEndColor}) 100%)`;
-		timeBody.style.background = `-moz-linear-gradient(top, rgb(${newStartColor}) 0%, rgb(${newEndColor}) 100%)`;
-		
+
+        startColor.map( (x,i) => {
+            //if  we are at the end of the array don't add a coma
+            startColorString += i < 2 ? `${x}, ` : `${x}`;
+        });
+
+        endColor.map( (x, i) => {
+            //if  we are at the end of the array don't add a coma
+            endColorString += i < 2 ? `${x}, ` : `${x}`;
+        });
+
+        // console.log("start:", startColorString);
+        // console.log("end:", endColorString);
+
+        //TODO will probably need to add more vendor prefixes here
+		timeBody.style.background = `-webkit-linear-gradient(top, rgb(${startColorString}) 0%,rgb(${endColorString}) 100%)`;
+		timeBody.style.background = `-moz-linear-gradient(top, rgb(${startColorString}) 0%, rgb(${endColorString}) 100%)`;
+
+		//if we have to increase the color value these are set to false
+        //once the color values are the same we can clear the interval
 		if(startFinished && endFinished){
 			clearInterval(colorIntervalTimer);
 		}
@@ -115,27 +119,15 @@ function colorChange(timePeriod, AmPm) {
 	let colorIntervalTimer = setInterval(increaseColor);
 }
 
-//TODO need to make this animate the color changes
 function increaseColor(timeFrame, currentTimePeriod) {
-	let timeBody = document.getElementById(`${timeFrame}-body`);
-	
-	
-	
-	//we want to grab each of the rgb values and change them so they match
-	//the new color;
-	
+    console.log("inside this version of increaseColor");
+    //TODO figure out if this is what you are acctually running
+    //TODO you can probably get rid of this call and have setAMoRpm call the above function instead of this one
 	if (currentTimePeriod === "am") {
-		// console.log("we're switching to pm");
-		// timeBody.style.background = `-webkit-linear-gradient(top, rgb(${newStartColor}) 0%,rgb(${newEndColor}) 100%)`;
-		// timeBody.style.background = `-moz-linear-gradient(top, rgb(${newStartColor}) 0%, rgb(${newEndColor}) 100%)`;
-		// setInterval(colorChange);
 		colorChange(timeFrame, "am");
 	}
 	
 	if (currentTimePeriod === "pm") {
-		console.log("we're switching to am");
-		// timeBody.classList.remove("am-time");
-		// timeBody.classList.add("pm-time");
 		colorChange(timeFrame, "pm");
 	}
 	
@@ -144,10 +136,7 @@ function increaseColor(timeFrame, currentTimePeriod) {
 
 function setAmOrPm(timeFrame, value) {
 	console.log("setAmOrPm");
-	// let timeBody = document.getElementById(`${timeFrame}-body`);
-	
-	// timeBody.classList.remove("fadeIn");
-	
+
 	if (value === "am") {
 		increaseColor(timeFrame, value)
 	}
