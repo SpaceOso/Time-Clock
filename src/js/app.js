@@ -26,29 +26,29 @@ function grabValues() {
 window.grabValues = grabValues;
 
 
-
 // ======================================
 //  Event Listeners
 // ======================================
 
 function setTimeClasses(event) {
+	//when the user clicks on either the AM or PM buttons
 	if (event.target.name === "start-time-frame") {
 		if (event.target.id === "start-am") {
-			Gradients.colorChange("start", "am");
+			Gradients.colorChange("start-body", "am");
 		}
 		
 		if (event.target.id === "start-pm") {
-			Gradients.colorChange("start", "pm")
+			Gradients.colorChange("start-body", "pm")
 		}
 	}
 	
 	if (event.target.name === "end-time-frame") {
 		if (event.target.id === "end-am") {
-			Gradients.colorChange("end", "am");
+			Gradients.colorChange("end-body", "am");
 		}
 		
 		if (event.target.id === "end-pm") {
-			Gradients.colorChange("end", "pm");
+			Gradients.colorChange("end-body", "pm");
 		}
 	}
 }

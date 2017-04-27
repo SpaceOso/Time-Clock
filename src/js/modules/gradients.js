@@ -3,7 +3,7 @@
  */
 
 //these are the rgb values from the design file
-const amEndColor= [255, 219, 151];
+const amEndColor = [255, 219, 151];
 const amStartColor = [252, 0, 68];
 const pmStartColor = [98, 147, 255];
 const pmEndColor = [170, 77, 177];
@@ -11,8 +11,8 @@ const errorStartColor = [255, 0, 69];
 const errorEndColor = [116, 0, 96];
 
 
-function setColors(colorFormat){
-	if(colorFormat === "am"){
+function setColors(colorFormat) {
+	if (colorFormat === "am") {
 		return {
 			goalColor: amEndColor,
 			endGoalColor: amStartColor,
@@ -21,7 +21,7 @@ function setColors(colorFormat){
 		}
 	}
 	
-	if(colorFormat === "pm"){
+	if (colorFormat === "pm") {
 		return {
 			goalColor: pmStartColor,
 			endGoalColor: pmEndColor,
@@ -30,7 +30,7 @@ function setColors(colorFormat){
 		}
 	}
 	
-	if(colorFormat === "error"){
+	if (colorFormat === "error") {
 		return {
 			goalColor: pmStartColor,
 			endGoalColor: pmEndColor,
@@ -46,51 +46,56 @@ export function colorChange(timePeriod, AmPm, error) {
 	let goalColor, endGoalColor;
 	let startColor, endColor;
 	
-	let timeBody = document.getElementById(`${timePeriod}-body`);
+	let canChangeBeStarted = true;
+	let colorIntervalTimer;
 	
-	if(AmPm === "am"){
-		timeBody.classList.remove("pm");
-		timeBody.classList.add("am");
-		({goalColor, endGoalColor, startColor,endColor} = setColors(AmPm));
+	let timeBody = document.getElementById(timePeriod);
+	
+	if (AmPm !== null) {
+		if (AmPm === "am") {
+			timeBody.classList.remove("pm");
+			timeBody.classList.add("am");
+			({goalColor, endGoalColor, startColor, endColor} = setColors(AmPm));
+		}
+		
+		if (AmPm === "pm") {
+			timeBody.classList.remove("am");
+			timeBody.classList.add("pm");
+			({goalColor, endGoalColor, startColor, endColor} = setColors(AmPm));
+		}
 	}
 	
-	if(AmPm === "pm"){
-		timeBody.classList.remove("am");
-		timeBody.classList.add("pm");
-		({goalColor, endGoalColor, startColor,endColor} = setColors(AmPm));
-	}
 	
-	if(error === true){
+	if (error === true) {
 		/*if we are adding an error
-		the start colors should be set to the AmPm
-		and change into the error colors*/
-		if(timeBody.hasClass("am")){
+		 the start colors should be set to the AmPm
+		 and change into the error colors*/
+		if (timeBody.classList.contains("am")) {
 			startColor = amEndColor;
 			endColor = amStartColor;
-		} else if(timeBody.hasClass("pm")){
+		} else if (timeBody.classList.contains("pm")) {
 			startColor = pmStartColor;
 			endColor = pmEndColor;
 		}
 		
 		goalColor = errorStartColor;
 		endGoalColor = errorEndColor;
-	
-	} else if( error === false){
+		
+	} else if (error === false) {
 		/*if we are getting rid of the error,
-		we need to know what to change into as the error fades away*/
+		 we need to know what to change into as the error fades away*/
 		startColor = errorStartColor;
 		endColor = errorEndColor;
-		if(timeBody.hasClass("am")){
+		if (timeBody.classList.contains("am")) {
 			goalColor = amEndColor;
 			endGoalColor = amStartColor;
-		} else if(timeBody.hasClass("pm")){
+		} else if (timeBody.classList.contains("pm")) {
 			goalColor = pmStartColor;
 			endGoalColor = pmEndColor;
 		}
 	}
 	
 	function increaseColor() {
-		//will turn false if we have to increase the color values
 		let startFinished = true;
 		let endFinished = true;
 		
@@ -98,12 +103,12 @@ export function colorChange(timePeriod, AmPm, error) {
 		let startColorString = "";
 		let endColorString = "";
 		
-		startColor = startColor.map((x, i) =>{
+		startColor = startColor.map((x, i) => {
 			
-			if(x < goalColor[i]){
+			if (x < goalColor[i]) {
 				x += 1;
 				startFinished = false;
-			} else if (x > goalColor[i]){
+			} else if (x > goalColor[i]) {
 				x -= 1;
 				startFinished = false;
 			}
@@ -114,12 +119,12 @@ export function colorChange(timePeriod, AmPm, error) {
 			return x;
 		});
 		
-		endColor = endColor.map((x, i) =>{
+		endColor = endColor.map((x, i) => {
 			
-			if( x < endGoalColor[i]){
+			if (x < endGoalColor[i]) {
 				x += 1;
 				endFinished = false;
-			} else if (x > endGoalColor[i]){
+			} else if (x > endGoalColor[i]) {
 				x -= 1;
 				endFinished = false;
 			}
@@ -137,11 +142,15 @@ export function colorChange(timePeriod, AmPm, error) {
 		
 		//if we have to increase the color value these are set to false
 		//once the color values are the same we can clear the interval
-		if(startFinished && endFinished){
+		if (startFinished && endFinished) {
 			clearInterval(colorIntervalTimer);
+			canChangeBeStarted = true;
 		}
-		
 	}
 	
-	let colorIntervalTimer = setInterval(increaseColor);
+	if(canChangeBeStarted){
+		canChangeBeStarted = false;
+		colorIntervalTimer = setInterval(increaseColor);
+	}
+	
 }

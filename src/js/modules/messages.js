@@ -1,4 +1,4 @@
-
+import * as Gradients from "./gradients";
 //error message holder
 const errorParent = document.getElementById('error-container');
 
@@ -67,9 +67,11 @@ export function throwError(objectToError, addClass, errorMessage) {
 	
     if (addClass) {
 	    objToError.classList.add('error');
+	    Gradients.colorChange(objectToError,null, true);
         error(errorMessage);
     } else {
 	    objToError.classList.remove('error');
+	    Gradients.colorChange(objectToError, null, false);
     }
 }
 
