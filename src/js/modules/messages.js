@@ -66,13 +66,17 @@ export function throwError(objectToError, addClass, errorMessage) {
 	let objToError = document.getElementById(objectToError);
 	
     if (addClass) {
-	    objToError.classList.add('error');
-	    Gradients.colorChange(objectToError,null, true);
-        error(errorMessage);
+        //if it already has the error class don't try to add another error to it
+        if(!objToError.classList.contains('error')){
+            objToError.classList.add('error');
+            Gradients.colorChange(objectToError,null, true);
+            error(errorMessage);
+        }
     } else {
 	    objToError.classList.remove('error');
 	    Gradients.colorChange(objectToError, null, false);
     }
+
 }
 
 export function error(errorMessage) {

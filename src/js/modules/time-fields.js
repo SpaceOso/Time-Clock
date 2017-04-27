@@ -89,12 +89,14 @@ function checkInputGroups(currentTask) {
     		Message.throwError(startTimes.id, true, Message.errorText.startTimeInvalid);
 	    } else {
     		startGroupChecked = true;
-		    Message.throwError(startTimes.id, false, "");
+    		//TODO need to clear errors here
+		    // Message.throwError(startTimes.id, false, "");
 	    }
 	    
 	    if(checkForNumber(endTimes)){
 	    	endGroupChecked = true;
-	    	Message.throwError(endTimes.id, false, "");
+	    	//TODO need to clear errors here
+	    	// Message.throwError(endTimes.id, false, "");
 	    }
     }
     

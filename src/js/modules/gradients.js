@@ -10,6 +10,9 @@ const pmEndColor = [170, 77, 177];
 const errorStartColor = [255, 0, 69];
 const errorEndColor = [116, 0, 96];
 
+//only run the color change interval is this is set to false
+let colorIntervalTimer = false;
+
 
 function setColors(colorFormat) {
 	if (colorFormat === "am") {
@@ -45,9 +48,6 @@ export function colorChange(timePeriod, AmPm, error) {
 	
 	let goalColor, endGoalColor;
 	let startColor, endColor;
-	
-	let canChangeBeStarted = true;
-	let colorIntervalTimer;
 	
 	let timeBody = document.getElementById(timePeriod);
 	
@@ -96,60 +96,61 @@ export function colorChange(timePeriod, AmPm, error) {
 	}
 	
 	function increaseColor() {
-		let startFinished = true;
-		let endFinished = true;
-		
-		//these will hold the rgb(#,#,#) value
-		let startColorString = "";
-		let endColorString = "";
-		
-		startColor = startColor.map((x, i) => {
-			
-			if (x < goalColor[i]) {
-				x += 1;
-				startFinished = false;
-			} else if (x > goalColor[i]) {
-				x -= 1;
-				startFinished = false;
-			}
-			
-			//if  we are at the end of the array don't add a coma
-			startColorString += i < 2 ? `${x}, ` : `${x}`;
-			
-			return x;
-		});
-		
-		endColor = endColor.map((x, i) => {
-			
-			if (x < endGoalColor[i]) {
-				x += 1;
-				endFinished = false;
-			} else if (x > endGoalColor[i]) {
-				x -= 1;
-				endFinished = false;
-			}
-			
-			//if  we are at the end of the array don't add a coma
-			endColorString += i < 2 ? `${x}, ` : `${x}`;
-			
-			return x;
-		});
-		
-		
-		//TODO will probably need to add more vendor prefixes here
-		timeBody.style.background = `-webkit-linear-gradient(top, rgb(${startColorString}) 0%,rgb(${endColorString}) 100%)`;
-		timeBody.style.background = `-moz-linear-gradient(top, rgb(${startColorString}) 0%, rgb(${endColorString}) 100%)`;
-		
-		//if we have to increase the color value these are set to false
-		//once the color values are the same we can clear the interval
-		if (startFinished && endFinished) {
-			clearInterval(colorIntervalTimer);
-			canChangeBeStarted = true;
-		}
+            let startFinished = true;
+            let endFinished = true;
+
+            //these will hold the rgb(#,#,#) value
+            let startColorString = "";
+            let endColorString = "";
+
+            startColor = startColor.map((x, i) => {
+
+                if (x < goalColor[i]) {
+                    x += 1;
+                    startFinished = false;
+                } else if (x > goalColor[i]) {
+                    x -= 1;
+                    startFinished = false;
+                }
+
+                //if  we are at the end of the array don't add a coma
+                startColorString += i < 2 ? `${x}, ` : `${x}`;
+
+                return x;
+            });
+
+            endColor = endColor.map((x, i) => {
+
+                if (x < endGoalColor[i]) {
+                    x += 1;
+                    endFinished = false;
+                } else if (x > endGoalColor[i]) {
+                    x -= 1;
+                    endFinished = false;
+                }
+
+                //if  we are at the end of the array don't add a coma
+                endColorString += i < 2 ? `${x}, ` : `${x}`;
+
+                return x;
+            });
+
+
+            //TODO will probably need to add more vendor prefixes here
+            timeBody.style.background = `-webkit-linear-gradient(top, rgb(${startColorString}) 0%,rgb(${endColorString}) 100%)`;
+            timeBody.style.background = `-moz-linear-gradient(top, rgb(${startColorString}) 0%, rgb(${endColorString}) 100%)`;
+
+            //if we have to increase the color value these are set to false
+            //once the color values are the same we can clear the interval
+            if (startFinished && endFinished) {
+                clearInterval(colorIntervalTimer);
+                colorIntervalTimer = false;
+            }
+
 	}
 	
-	if(canChangeBeStarted){
-		canChangeBeStarted = false;
+	if(colorIntervalTimer === false){
+		console.log("inside trying to start the interval");
 		colorIntervalTimer = setInterval(increaseColor);
 	}
 	
