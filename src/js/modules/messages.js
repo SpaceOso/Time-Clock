@@ -54,7 +54,7 @@ export const errorText = {
 };
 
 export function throwError(objectToError, addClass, errorMessage) {
-    console.log("throwError()");
+    // console.log("throwError()");
     console.log("objToError:", objectToError, "addClass:", addClass, "errorMessage:", errorMessage);
     
     if(objectToError === 'both'){
@@ -69,12 +69,12 @@ export function throwError(objectToError, addClass, errorMessage) {
         //if it already has the error class don't try to add another error to it
         if(!objToError.classList.contains('error')){
             objToError.classList.add('error');
-            Gradients.colorChange(objectToError,null, true);
+            Gradients.colorChange(objectToError, true);
             error(errorMessage);
         }
     } else {
 	    objToError.classList.remove('error');
-	    Gradients.colorChange(objectToError, null, false);
+	    Gradients.colorChange(objectToError, false);
     }
 
 }

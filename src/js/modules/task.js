@@ -29,26 +29,7 @@ const endTimeZones = document.getElementsByName('end-time-frame');
 let inEditTaskName;
 let deleteColon = false;
 
-function formatTimeInput(timeStr, timeGroup) {
-
-	//TODO need to make a function to check that its only digits that we're passing
-    let hour = timeStr.substr(0, 2);
-    let minutes = timeStr.substr(2);
-    console.log("hour:", hour, "minutes", minutes);
-	
-    if(timeGroup === "start"){
-    	startTimeValues = {hour: hour, minutes: minutes};
-    }
-    
-    if(timeGroup === "end"){
-    	endTimeValues = {hour: hour, minutes: minutes};
-    }
-    
-    return `${hour} : ${minutes}`;
-}
-
-
-//TODO need to create the following for the end-time input as well
+//TODO need to create a blur event listener so we can know if we can show the submit times button
 //this was changed from blur to keyup, I think it works better this way
 startTimeInput.addEventListener("keyup", function (event) {
 
@@ -57,7 +38,7 @@ startTimeInput.addEventListener("keyup", function (event) {
 	} else {
 		//TODO need to throw error here saying to input 4 digits for time 00:00
 		//TODO if we're going to go with keyup this error statement needs to be above
-		console.log("Error: Not valid start time");
+		// console.log("Error: Not valid start time");
 	}
 });
 
@@ -67,16 +48,36 @@ endTimeInput.addEventListener("keyup", function (event) {
 		event.target.value = formatTimeInput(event.target.value, "end");
 	} else {
 		//TODO need to throw error here saying to input 4 digits for time 00:00
-		console.log("Error: Not valid start time");
+		// console.log("Error: Not valid start time");
 	}
 });
+
+
+function formatTimeInput(timeStr, timeGroup) {
+	
+	//TODO need to make a function to check that its only digits that we're passing
+	let hour = timeStr.substr(0, 2);
+	let minutes = timeStr.substr(2);
+	console.log("hour:", hour, "minutes", minutes);
+	
+	if(timeGroup === "start"){
+		startTimeValues = {hour: hour, minutes: minutes};
+	}
+	
+	if(timeGroup === "end"){
+		endTimeValues = {hour: hour, minutes: minutes};
+	}
+	
+	return `${hour} : ${minutes}`;
+}
+
 
 function getAmOrPM() {
 
     let startPM = false;
     let endPM = false;
-
-
+    
+    //these are the AmPm buttons, we cycle through to figure if it's pm or am
     startTimeZones.forEach(el => {
         // console.log(el);
         if (el.checked && el.id === "start-pm") {
