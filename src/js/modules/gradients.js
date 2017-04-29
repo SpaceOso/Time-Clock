@@ -9,10 +9,12 @@ const pmStartColor = [98, 147, 255];
 const pmEndColor = [170, 77, 177];
 const errorStartColor = [255, 0, 69];
 const errorEndColor = [116, 0, 96];
+//TODO need better base colors
+const standardStartColor = [100, 252, 92];
+const standardEndColor = [252, 219, 151];
 
 //only run the color change interval is this is set to false
 let colorIntervalTimer = false;
-let canStartAnimation = true;
 //The AM or PM radio buttons for both time inputs
 let radioButtons = document.querySelectorAll("input[type='radio']");
 
@@ -24,48 +26,40 @@ for (let radio of radioButtons) {
 
 function setTimeClasses(event) {
 	
-	// console.log(canStartAnimation);
-	// if(canStartAnimation !== false){
-	// 	console.log("can't run returning!");
-	// 	return false;
-	// }
 	
-	console.log("setTimeClasses()", canStartAnimation);
 	console.log("event.target.id", event.target.id);
-	if (canStartAnimation) {
-		//when the user clicks on either the AM or PM buttons
-		let body, timePeriod;
-		
-		if (event.target.name === "start-time-frame") {
-			body = "start-body";
-			if (event.target.id === "start-am") {
-				timePeriod = "am";
-				document.getElementById('start-pm').disabled = true;
-			}
-			
-			if (event.target.id === "start-pm") {
-				timePeriod = "pm";
-				document.getElementById('start-am').disabled = true;
-			}
+	//when the user clicks on either the AM or PM buttons
+	let body, timePeriod;
+	
+	if (event.target.name === "start-time-frame") {
+		body = "start-body";
+		if (event.target.id === "start-am") {
+			timePeriod = "am";
+			document.getElementById('start-pm').disabled = true;
 		}
 		
-		if (event.target.name === "end-time-frame") {
-			body = "end-body";
-			if (event.target.id === "end-am") {
-				timePeriod = "am";
-				document.getElementById('end-pm').disabled = true;
-			}
-			
-			if (event.target.id === "end-pm") {
-				timePeriod = "pm";
-				document.getElementById('end-am').disabled = true;
-			}
+		if (event.target.id === "start-pm") {
+			timePeriod = "pm";
+			document.getElementById('start-am').disabled = true;
 		}
-		
-		console.log("so we made it to the end");
-		console.log("body", body, "timePeriod", timePeriod);
-		colorChange(body, timePeriod);
 	}
+	
+	if (event.target.name === "end-time-frame") {
+		body = "end-body";
+		if (event.target.id === "end-am") {
+			timePeriod = "am";
+			document.getElementById('end-pm').disabled = true;
+		}
+		
+		if (event.target.id === "end-pm") {
+			timePeriod = "pm";
+			document.getElementById('end-am').disabled = true;
+		}
+	}
+	
+	console.log("so we made it to the end");
+	console.log("body", body, "timePeriod", timePeriod);
+	colorChange(body, timePeriod);
 }
 
 
@@ -96,29 +90,59 @@ function setColors(colorFormat) {
 			endColor: amStartColor
 		}
 	}
+	
+	if(colorFormat === "default"){
+		return {
+			goalColor: pmStartColor,
+			endGoalColor: pmEndColor,
+			startColor: standardStartColor,
+			endColor: standardEndColor
+		}
+	}
+}
+
+function enableRadioButtons(){
+	radioButtons.forEach(button => {
+		document.getElementById(button.id).disabled = false;
+	});
 }
 
 export function colorChange(timePeriod, AmPm, error) {
-	console.log("colorChange()", timePeriod, AmPm, error);
+	// console.log("colorChange()", timePeriod, AmPm, error);
 	
 	let goalColor, endGoalColor;
 	let startColor, endColor;
 	
-	
 	let timeBody = document.getElementById(timePeriod);
 	
+	if (timeBody.classList.contains("am")) {
+		({startColor, endColor} = setColors("pm"));
+	} else if (timeBody.classList.contains("pm")) {
+		({startColor, endColor} = setColors("am"));
+	} else {
+		({startColor, endColor} = setColors("default"));
+	}
+	
 	if (AmPm === "am") {
+		if(timeBody.classList.contains("am")){
+			enableRadioButtons();
+			return false;
+		}
 		timeBody.classList.remove("pm");
 		timeBody.classList.add("am");
-		({goalColor, endGoalColor, startColor, endColor} = setColors("am"));
-		canStartAnimation = false;
+		({goalColor, endGoalColor} = setColors("am"));
+		// canStartAnimation = false;
 	}
 	
 	if (AmPm === "pm") {
+		if(timeBody.classList.contains("pm")){
+			enableRadioButtons();
+			return false;
+		}
 		timeBody.classList.remove("am");
 		timeBody.classList.add("pm");
-		({goalColor, endGoalColor, startColor, endColor} = setColors("pm"));
-		canStartAnimation = false;
+		({goalColor, endGoalColor} = setColors("pm"));
+		// canStartAnimation = false;
 	}
 	
 	
@@ -152,8 +176,7 @@ export function colorChange(timePeriod, AmPm, error) {
 	}
 	
 	function increaseColor() {
-		
-		console.log("increaseColor:", canStartAnimation);
+		console.log("increaseColor");
 		let startFinished = true;
 		let endFinished = true;
 		
@@ -161,17 +184,6 @@ export function colorChange(timePeriod, AmPm, error) {
 		let startColorString = "";
 		let endColorString = "";
 
-		if(startColor.toString() === goalColor.toString()){
-            clearInterval(colorIntervalTimer);
-            colorIntervalTimer = false;
-
-            radioButtons.forEach(button => {
-                document.getElementById(button.id).disabled = false;
-            });
-
-            canStartAnimation = true;
-		}
-		
 		startColor = startColor.map((x, i) => {
 			
 			if (x < goalColor[i]) {
@@ -196,7 +208,7 @@ export function colorChange(timePeriod, AmPm, error) {
 			} else if (x > endGoalColor[i]) {
 				x -= 1;
 				endFinished = false;
-
+				
 			}
 			
 			//if  we are at the end of the array don't add a coma
@@ -216,13 +228,8 @@ export function colorChange(timePeriod, AmPm, error) {
 			clearInterval(colorIntervalTimer);
 			colorIntervalTimer = false;
 			
-			radioButtons.forEach(button => {
-				document.getElementById(button.id).disabled = false;
-			});
-			
-			canStartAnimation = true;
+			enableRadioButtons();
 		}
-		
 	}
 	
 	
