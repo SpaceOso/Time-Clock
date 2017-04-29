@@ -99,7 +99,7 @@ function setColors(colorFormat) {
 }
 
 export function colorChange(timePeriod, AmPm, error) {
-	console.log("colorChange()", timePeriod, error);
+	console.log("colorChange()", timePeriod, AmPm, error);
 	
 	let goalColor, endGoalColor;
 	let startColor, endColor;
@@ -107,14 +107,14 @@ export function colorChange(timePeriod, AmPm, error) {
 	
 	let timeBody = document.getElementById(timePeriod);
 	
-	if (AmPm === "am" && !timeBody.classList.contains('am')) {
+	if (AmPm === "am") {
 		timeBody.classList.remove("pm");
 		timeBody.classList.add("am");
 		({goalColor, endGoalColor, startColor, endColor} = setColors("am"));
 		canStartAnimation = false;
 	}
 	
-	if (AmPm === "pm" && !timeBody.classList.contains('pm')) {
+	if (AmPm === "pm") {
 		timeBody.classList.remove("am");
 		timeBody.classList.add("pm");
 		({goalColor, endGoalColor, startColor, endColor} = setColors("pm"));
@@ -160,6 +160,17 @@ export function colorChange(timePeriod, AmPm, error) {
 		//these will hold the rgb(#,#,#) value
 		let startColorString = "";
 		let endColorString = "";
+
+		if(startColor.toString() === goalColor.toString()){
+            clearInterval(colorIntervalTimer);
+            colorIntervalTimer = false;
+
+            radioButtons.forEach(button => {
+                document.getElementById(button.id).disabled = false;
+            });
+
+            canStartAnimation = true;
+		}
 		
 		startColor = startColor.map((x, i) => {
 			
@@ -185,6 +196,7 @@ export function colorChange(timePeriod, AmPm, error) {
 			} else if (x > endGoalColor[i]) {
 				x -= 1;
 				endFinished = false;
+
 			}
 			
 			//if  we are at the end of the array don't add a coma
