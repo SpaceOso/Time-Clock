@@ -5,16 +5,14 @@ import * as Gradients from "./modules/gradients";
 import "../styles/styles.scss";
 
 
-
 function grabValues() {
 	
 	console.log("grabValues()");
-	// Message.clear();
-	
+
 	let currentTask = Task.createTask();
 	console.log(currentTask);
+	
 	if (currentTask !== false) {
-		
 		document.getElementById('time-form').reset();
 		document.getElementById('task-input').blur();
 		Task.displayTimes(currentTask);

@@ -84,8 +84,8 @@ function setColors(colorFormat) {
 	
 	if (colorFormat === "error") {
 		return {
-			goalColor: pmStartColor,
-			endGoalColor: pmEndColor,
+			goalColor: errorStartColor,
+			endGoalColor: errorEndColor,
 			startColor: amEndColor,
 			endColor: amStartColor
 		}
@@ -119,6 +119,8 @@ export function colorChange(timePeriod, AmPm, error) {
 		({startColor, endColor} = setColors("pm"));
 	} else if (timeBody.classList.contains("pm")) {
 		({startColor, endColor} = setColors("am"));
+	} else if(timeBody.classList.contains("error")){
+		({startColor, endColor} = setColors("error"));
 	} else {
 		({startColor, endColor} = setColors("default"));
 	}
@@ -147,19 +149,15 @@ export function colorChange(timePeriod, AmPm, error) {
 	
 	
 	if (error === true) {
-		/*if we are adding an error the start colors should be set to the AmPm and change into the error colors*/
+		console.log("we're throwing an error!");
+		/*if we are adding an error the start colors should be set to the A`m`Pm and change into the error colors*/
 		if (timeBody.classList.contains("am")) {
 			console.log("timebody has am class");
-			startColor = amEndColor;
-			endColor = amStartColor;
 		} else if (timeBody.classList.contains("pm")) {
 			console.log("timebody has pm class");
-			startColor = pmStartColor;
-			endColor = pmEndColor;
 		}
 		
-		goalColor = errorStartColor;
-		endGoalColor = errorEndColor;
+		({goalColor, endGoalColor} = setColors("error"));
 		
 	} else if (error === false) {
 		/*if we are getting rid of the error,

@@ -6,107 +6,26 @@
 import * as TaskService from "./task-service";
 import * as TimeFields from "./time-fields";
 import * as TimeMath from "./time-clock-math";
+import * as TaskName from "./task-name";
 
 "use strict";
 
 let taskNameID = '';
 let isEditing = false;
 
-//inputs
-const taskNameInput = document.getElementById('task-input');
-const startTimeInput = document.getElementById('start-time');
-const endTimeInput = document.getElementById('end-time');
-
-//time values
-let startTimeValues;
-let endTimeValues;
-
-//time radio buttons
-const startTimeZones = document.getElementsByName('start-time-frame');
-const endTimeZones = document.getElementsByName('end-time-frame');
 
 //will hold the current editing value
 let inEditTaskName;
-let deleteColon = false;
-
-//TODO need to create a blur event listener so we can know if we can show the submit times button
-//this was changed from blur to keyup, I think it works better this way
-startTimeInput.addEventListener("keyup", function (event) {
-
-	if(event.target.value.length === 4){
-		event.target.value = formatTimeInput(event.target.value, "start");
-	} else {
-		//TODO need to throw error here saying to input 4 digits for time 00:00
-		//TODO if we're going to go with keyup this error statement needs to be above
-		// console.log("Error: Not valid start time");
-	}
-});
-
-endTimeInput.addEventListener("keyup", function (event) {
-	
-	if(event.target.value.length === 4){
-		event.target.value = formatTimeInput(event.target.value, "end");
-	} else {
-		//TODO need to throw error here saying to input 4 digits for time 00:00
-		// console.log("Error: Not valid start time");
-	}
-});
-
-
-function formatTimeInput(timeStr, timeGroup) {
-	
-	//TODO need to make a function to check that its only digits that we're passing
-	let hour = timeStr.substr(0, 2);
-	let minutes = timeStr.substr(2);
-	console.log("hour:", hour, "minutes", minutes);
-	
-	if(timeGroup === "start"){
-		startTimeValues = {hour: hour, minutes: minutes};
-	}
-	
-	if(timeGroup === "end"){
-		endTimeValues = {hour: hour, minutes: minutes};
-	}
-	
-	return `${hour} : ${minutes}`;
-}
-
-
-function getAmOrPM() {
-
-    let startPM = false;
-    let endPM = false;
-    
-    //these are the AmPm buttons, we cycle through to figure if it's pm or am
-    startTimeZones.forEach(el => {
-        // console.log(el);
-        if (el.checked && el.id === "start-pm") {
-            console.log(el.id);
-            startPM = true;
-        }
-    });
-
-    endTimeZones.forEach(el => {
-        if (el.checked && el.id === "end-pm") {
-            console.log(el);
-            endPM = true;
-        }
-    });
-
-
-    return {
-        startPM: startPM,
-        endPM: endPM
-    };
-}
 
 export function createTask() {
     console.log("createTask()");
 	
     //returns an object with startTime and endTime AMPM values
-    let {startPM, endPM} = getAmOrPM();
+    let {startPM, endPM} = TimeFields.getAmOrPM();
 	
-    let taskName = taskNameInput.value;
+    let taskName = TaskName.getName();
+    let startTime = TimeFields.getTimes("start");
+    let endTime = TimeFields.getTimes("end");
 	
     //TODO it would be nice if this shit would work
     let currentTask = {
@@ -115,14 +34,14 @@ export function createTask() {
         startTimes: {
             id: 'start-body',
             pm: startPM,
-            hour: startTimeValues.hour,
-            minutes: startTimeValues.minutes
+            hour: startTime.hour,
+            minutes: startTime.minutes
         },
         endTimes: {
             id: 'end-body',
             pm: endPM,
-            hour: endTimeValues.hour,
-            minutes: endTimeValues.minutes
+            hour: endTime.hour,
+            minutes: endTime.minutes
         },
         totalTimeSpentHours: 0,
         totalTimeSpentMinutes: 0
@@ -131,7 +50,7 @@ export function createTask() {
 
     console.log("init task:", currentTask);
 
-    if (TimeFields.validateTimeInputs(currentTask)) {
+    if (TimeFields.checkInputGroups(currentTask)) {
         console.log('returning this task:', currentTask);
 
         if (TimeFields.confirmInputs(currentTask)) {
