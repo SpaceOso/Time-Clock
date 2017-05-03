@@ -147,7 +147,7 @@ input{
 
     label{
       display: block;
-      margin: 15px;
+      margin: 0 0 15px 10px;
     }
 
   }
@@ -167,8 +167,6 @@ input{
 
 
 }
-
-
 
 .standard-time{
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fc0044+0,ffdb97+100 */
@@ -202,4 +200,9 @@ input{
   max-width: 700px;
   margin: auto;
   text-align: center;
+}
+
+.icon-error{
+  width: 53px;
+  align-self: flex-start;
 }

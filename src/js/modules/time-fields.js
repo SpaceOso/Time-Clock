@@ -24,48 +24,70 @@ const endTimeZones = document.getElementsByName('end-time-frame');
 //this was changed from blur to keyup, I think it works better this way
 startTimeInput.addEventListener("keyup", function (event) {
 	
-	event.target.value = validateTimeInput(event.target.value, "end");
+	event.target.value = validateTimeInput(event.target.value, startGroup);
 	
 });
 
 endTimeInput.addEventListener("keyup", function (event) {
 	
-	event.target.value = validateTimeInput(event.target.value, "end");
+	event.target.value = validateTimeInput(event.target.value, endGroup);
 	
 });
 
-function validateTimeInput(eventValue, timeFrame){
+function trimTimeString(timeValue){
+	return timeValue.replace(/\s:*/g, '');
+}
+
+//this gets called on keyup for the time inputs
+function validateTimeInput(eventValue, timeGroup){
 	let updatedValue = "";
 	
-	if(eventValue.length === 2){
+	console.log("validateTimeInput", eventValue, "timeFrame", timeGroup);
+	
+	//get rid of any empty space
+	eventValue = trimTimeString(eventValue);
+	
+	if(checkForNumber(eventValue) === null){
+		console.log("we have an error on this input");
+		Message.throwError(timeGroup, Message.errorText.notANumber);
+	} else {
+		//did not add the error, but we need to check if it had it from a previous check
+		Message.checkAndRemoveError(timeGroup, Message.errorText.notANumber.errorID);
+	}
+	
+	if(eventValue.length >= 2){
 		updatedValue = setHour(eventValue);
 		if(updatedValue.length > 0){
 			eventValue = updatedValue;
 		}
+		
+		trimTimeString(eventValue);
 	}
 	
-	if(eventValue.length === 4){
-		eventValue = formatTimeInput(eventValue, "start");
-	} else {
-		//TODO need to throw error here saying to input 4 digits for time 00:00
-		//TODO if we're going to go with keyup this error statement needs to be above
-		// console.log("Error: Not valid start time");
+	if(eventValue.length >= 3){
+		console.log("time value length is greater than 3", eventValue);
+		eventValue = formatTimeInput(eventValue, timeGroup);
 	}
 	
 	return eventValue;
 }
 
 function formatTimeInput(timeStr, timeGroup) {
-	
+	console.log("formatTimeInput:", timeStr, "timeGroup:", timeGroup);
 	let hour = timeStr.substr(0, 2);
 	let minutes = timeStr.substr(2);
 	console.log("hour:", hour, "minutes", minutes);
 	
-	if(timeGroup === "start"){
+	if(hour === "00"){
+		console.log("hour cannot be 00");
+		Message.throwError(timeGroup, Message.errorText.hourInvalid);
+	}
+	
+	if(timeGroup === "start-body"){
 		startTimeValues = {hour: hour, minutes: minutes};
 	}
 	
-	if(timeGroup === "end"){
+	if(timeGroup === "end-body"){
 		endTimeValues = {hour: hour, minutes: minutes};
 	}
 	
@@ -74,14 +96,19 @@ function formatTimeInput(timeStr, timeGroup) {
 
 export function getTimes(timeGroup){
 	if(timeGroup === "start"){
+		console.log("grabbed the start:", timeGroup);
+		console.log("and returning:", startTimeValues);
 		return startTimeValues
 	} else if( timeGroup === "end"){
+		console.log("grabbed the end:", timeGroup);
+		console.log("and returning:", endTimeValues);
 		return endTimeValues;
 	}
 }
 
 function setHour(value){
 	let modifiedValue = "";
+	value = value.substr(0, 2);
 	console.log("inside setHour", value);
 	if(checkForNumber(value) !== null){
 		console.log("setHour, we know it's a valid number");

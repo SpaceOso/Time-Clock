@@ -54,22 +54,57 @@ export const errorText = {
 	
 };
 
-export function throwError(objectToError, errorMessage) {
-	console.log("objToError:", objectToError, "errorMessage:", errorMessage);
+//need to store what errors each time group contains
+export let startTimeErrors = {
+	currentErrors: []
+};
+
+export let endTimeErrors = {
+	currentErrors: []
+};
+
+export function returnErrorList(timeGroup) {
+	console.log("returning errorlist for ", timeGroup);
+	return timeGroup === "start-body" ? startTimeErrors.currentErrors : endTimeErrors.currentErrors;
+}
+
+export function throwError(objectToError, errorTextObj) {
+	console.log("objToError:", objectToError, "errorMessage:", errorTextObj);
 	
 	if (objectToError === 'both') {
-		throwError('start-body', errorMessage.message);
-		throwError('end-body', errorMessage.message);
+		throwError('start-body', errorTextObj.message);
+		throwError('end-body', errorTextObj.message);
 		return true;
 	}
+	//contains the error img
+	let errorImgDiv;
+	let errorContainer;
+	let elementToError = document.getElementById(objectToError);
 	
-	let objToError = document.getElementById(objectToError);
+	errorImgDiv = document.getElementById(objectToError === "start-body" ? 'start-error' : "end-error");
+	
+	if (objectToError === "start-body") {
+		errorImgDiv = document.getElementById('start-body');
+		errorContainer = startTimeErrors.currentErrors;
+	} else if (objectToError === "end-body") {
+		errorImgDiv = document.getElementById('end-body');
+		errorContainer = endTimeErrors.currentErrors;
+	}
+	
+	//TODO check to see if the array already contains the errorID if it does don't add it again
+	if (!errorContainer.includes(errorTextObj.errorID)) {
+		errorContainer.push(errorTextObj.errorID);
+	}
+	
+	console.log(errorContainer);
 	
 	//if it already has the error class don't try to add another error to it
-	if (!objToError.classList.contains('error')) {
-		objToError.classList.add('error');
+	if (!elementToError.classList.contains('error')) {
+		elementToError.classList.add('error');
+		errorImgDiv.classList.remove("hidden");
+		
 		Gradients.colorChange(objectToError, false, true);
-		error(errorMessage);
+		error(errorTextObj);
 	}
 	
 }
@@ -93,9 +128,17 @@ export function error(errorMessage) {
 }
 
 //TODO need to create a function that removes specific errors as inputs get validated
-export function removeError(errorID) {
-	objToError.classList.remove('error');
-	Gradients.colorChange(objectToError, false, false);
+export function checkAndRemoveError(timeGroup, errorID) {
+	
+	let currentErrors = timeGroup === "start-body" ? startTimeErrors.currentErrors : endTimeErrors.currentErrors;
+	
+	if(currentErrors.includes(errorID)){
+		let index = currentErrors.indexOf(errorID);
+		currentErrors.splice(index, 1);
+	}
+	
+	
+	// Gradients.colorChange(objectToError, false, false);
 }
 
 export function clear() {

@@ -46,11 +46,13 @@
 				       name="task-name"
 				       required
 				>
+				
 			</div>
 			
 			<div class="time-input" id="start-body">
 				
 				<div class="time-flex">
+					
 					<div class="time-set">
 						<label for="start-am">
 							<input id="start-am" type="radio" name="start-time-frame" value="start-am">
@@ -67,10 +69,14 @@
 						<label for="start-time">Start Time</label>
 						<input type="text"
 						       id="start-time"
-						       maxlength="4"
+						       maxlength="7"
 						       placeholder="hour : minutes"
 						       required
 						>
+					</div>
+					
+					<div id="start-error" class="icon-error hidden" >
+						<img src="./img/icon-error.svg" alt="error icon">
 					</div>
 				</div>
 			
@@ -86,9 +92,12 @@
 					<div class="time-input-group">
 						<label for="end-time">End Time</label>
 						<input type="text"
-						       maxlength="4"
+						       maxlength="7"
 						       placeholder="hour : minutes"
 						       id="end-time">
+					</div>
+					<div id="end-error" class="icon-error hidden" >
+						<img src="./img/icon-error.svg" alt="error icon">
 					</div>
 				</div>
 			
