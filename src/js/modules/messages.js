@@ -76,6 +76,7 @@ export function throwError(objectToError, errorTextObj) {
 		throwError('end-body', errorTextObj.message);
 		return true;
 	}
+
 	//contains the error img
 	let errorImgDiv;
 	let errorContainer;
@@ -84,10 +85,12 @@ export function throwError(objectToError, errorTextObj) {
 	errorImgDiv = document.getElementById(objectToError === "start-body" ? 'start-error' : "end-error");
 	
 	if (objectToError === "start-body") {
-		errorImgDiv = document.getElementById('start-body');
+		errorImgDiv = document.getElementById('start-error');
+		errorImgDiv.classList.remove('hidden');
 		errorContainer = startTimeErrors.currentErrors;
 	} else if (objectToError === "end-body") {
-		errorImgDiv = document.getElementById('end-body');
+		errorImgDiv = document.getElementById('end-error');
+		errorImgDiv.classList.remove('hidden');
 		errorContainer = endTimeErrors.currentErrors;
 	}
 	
@@ -129,16 +132,33 @@ export function error(errorMessage) {
 
 //TODO need to create a function that removes specific errors as inputs get validated
 export function checkAndRemoveError(timeGroup, errorID) {
-	
+	let hadError = false
+
 	let currentErrors = timeGroup === "start-body" ? startTimeErrors.currentErrors : endTimeErrors.currentErrors;
 	
 	if(currentErrors.includes(errorID)){
 		let index = currentErrors.indexOf(errorID);
 		currentErrors.splice(index, 1);
+		hadError = true;
 	}
+
+	//check to see if it still has some other errors
+    if(currentErrors.length === 0 && hadError === true){
+	    //Since there is no more errors we need to change the input back to it's default colors
+        Gradients.colorChange(timeGroup, null, false);
+        hideErrorSign(timeGroup);
+        let timeGroupDiv = document.getElementById(timeGroup);
+        timeGroupDiv.classList.remove('error');
+    }
 	
 	
 	// Gradients.colorChange(objectToError, false, false);
+}
+
+function hideErrorSign(timeGroup){
+    let errorImgDiv = document.getElementById(timeGroup === "start-body" ? 'start-error' : "end-error");
+
+    errorImgDiv.classList.add('hidden');
 }
 
 export function clear() {

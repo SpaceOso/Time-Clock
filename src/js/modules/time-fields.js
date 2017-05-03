@@ -23,18 +23,25 @@ const endTimeZones = document.getElementsByName('end-time-frame');
 //TODO need to create a blur event listener so we can know if we can show the submit times button
 //this was changed from blur to keyup, I think it works better this way
 startTimeInput.addEventListener("keyup", function (event) {
-	
-	event.target.value = validateTimeInput(event.target.value, startGroup);
+
+	console.log(event.code);
+
+	if(event.target.value.length !== 0){
+        event.target.value = validateTimeInput(event.target.value, startGroup);
+	}
+
 	
 });
 
 endTimeInput.addEventListener("keyup", function (event) {
-	
-	event.target.value = validateTimeInput(event.target.value, endGroup);
-	
+
+	if(event.target.value.length !== 0){
+        event.target.value = validateTimeInput(event.target.value, endGroup);
+    }
+
 });
 
-function trimTimeString(timeValue){
+function removeWhiteSpace(timeValue){
 	return timeValue.replace(/\s:*/g, '');
 }
 
@@ -42,13 +49,12 @@ function trimTimeString(timeValue){
 function validateTimeInput(eventValue, timeGroup){
 	let updatedValue = "";
 	
-	console.log("validateTimeInput", eventValue, "timeFrame", timeGroup);
+	// console.log("validateTimeInput", eventValue, "timeFrame", timeGroup);
 	
 	//get rid of any empty space
-	eventValue = trimTimeString(eventValue);
+	eventValue = removeWhiteSpace(eventValue);
 	
 	if(checkForNumber(eventValue) === null){
-		console.log("we have an error on this input");
 		Message.throwError(timeGroup, Message.errorText.notANumber);
 	} else {
 		//did not add the error, but we need to check if it had it from a previous check
@@ -61,7 +67,7 @@ function validateTimeInput(eventValue, timeGroup){
 			eventValue = updatedValue;
 		}
 		
-		trimTimeString(eventValue);
+		removeWhiteSpace(eventValue);
 	}
 	
 	if(eventValue.length >= 3){
