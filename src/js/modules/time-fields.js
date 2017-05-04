@@ -4,6 +4,7 @@
 import * as Message from "./messages";
 import * as TimeMath from "./time-clock-math";
 import * as TaskService from "./task-service";
+import * as Gradients from "./gradients";
 
 //input groups
 const startGroup = 'start-body';
@@ -19,6 +20,59 @@ let endTimeValues;
 //time radio buttons
 const startTimeZones = document.getElementsByName('start-time-frame');
 const endTimeZones = document.getElementsByName('end-time-frame');
+
+//The AM or PM radio buttons for both time inputs
+let radioButtons = document.querySelectorAll("input[type='radio']");
+
+for (let radio of radioButtons) {
+	radio.addEventListener("click", function (event) {
+		setTimeClasses(event);
+	})
+}
+
+function enableRadioButtons(){
+	radioButtons.forEach(button => {
+		document.getElementById(button.id).disabled = false;
+	});
+}
+
+function setTimeClasses(event) {
+	
+	console.log("event.target.id", event.target.id);
+	//when the user clicks on either the AM or PM buttons
+	let body, timePeriod;
+	
+	if (event.target.name === "start-time-frame") {
+		body = "start-body";
+		if (event.target.id === "start-am") {
+			timePeriod = "am";
+			document.getElementById('start-pm').disabled = true;
+		}
+		
+		if (event.target.id === "start-pm") {
+			timePeriod = "pm";
+			document.getElementById('start-am').disabled = true;
+		}
+	}
+	
+	if (event.target.name === "end-time-frame") {
+		body = "end-body";
+		if (event.target.id === "end-am") {
+			timePeriod = "am";
+			document.getElementById('end-pm').disabled = true;
+		}
+		
+		if (event.target.id === "end-pm") {
+			timePeriod = "pm";
+			document.getElementById('end-am').disabled = true;
+		}
+	}
+	
+	console.log("so we made it to the end");
+	console.log("body", body, "timePeriod", timePeriod);
+	Gradients.colorChange(body, timePeriod);
+}
+
 
 //TODO need to create a blur event listener so we can know if we can show the submit times button
 //this was changed from blur to keyup, I think it works better this way

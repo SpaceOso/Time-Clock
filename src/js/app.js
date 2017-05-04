@@ -1,6 +1,6 @@
 import * as Task from "./modules/task";
-import * as Message from "./modules/messages";
-import * as Gradients from "./modules/gradients";
+// import * as Message from "./modules/messages";
+// import * as Gradients from "./modules/gradients";
 
 import "../styles/styles.scss";
 
