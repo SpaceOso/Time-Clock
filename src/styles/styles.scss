@@ -124,7 +124,7 @@ input{
 
 .time-input{
   width: 307px;
-  height: 140px;
+  //height: 140px;
   border: 3px solid $mainFont;
   display: inline-block;
   -webkit-border-radius: 13px;
@@ -205,4 +205,46 @@ input{
 .icon-error{
   width: 53px;
   align-self: flex-start;
+}
+
+.slider{
+  display: inline-block;
+}
+
+.ampm-icon{
+  //float: left;
+  width: 50px;
+}
+
+.ampm-toggle-container{
+  //width: 200px;
+  //height: 100px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  width: auto;
+  text-align: center;
+}
+
+.slider-container{
+  background-color: #8DDAE6;
+  width: 50px;
+  height: 25px;
+  -webkit-border-radius:25%;
+  -moz-border-radius:25%;
+  border-radius:25%;
+  margin: auto 0;
+  position: relative;
+}
+
+.slider{
+  background-color: #ffffff;
+  -webkit-border-radius:50%;
+  -moz-border-radius:50%;
+  border-radius:50%;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
