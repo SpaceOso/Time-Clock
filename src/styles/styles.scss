@@ -115,7 +115,7 @@ input{
 }
 
 .time-flex{
-  display: flex;
+  //display: flex;
   align-items: center;
   width: 100%;
   height: 100%;
@@ -131,7 +131,7 @@ input{
   -moz-border-radius: 13px;
   border-radius: 13px;
   margin: 50px 20px;
-  text-align: left;
+  text-align: center;
   padding-top: 5px;
 
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fc0044+0,ffdb97+100 */
@@ -213,7 +213,7 @@ input{
 
 .ampm-icon{
   //float: left;
-  width: 50px;
+  width: 30px;
 }
 
 .ampm-toggle-container{
@@ -224,6 +224,7 @@ input{
   justify-content: center;
   width: auto;
   text-align: center;
+  margin: 5px 0;
 }
 
 .slider-container{
