@@ -1,7 +1,5 @@
 import * as Task from "./modules/task";
-// import * as Message from "./modules/messages";
-// import * as Gradients from "./modules/gradients";
-
+import * as TimeSlider from "./modules/time-slider";
 import "../styles/styles.scss";
 
 

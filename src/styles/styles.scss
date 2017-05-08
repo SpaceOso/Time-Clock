@@ -221,15 +221,15 @@ input{
   //height: 100px;
   display: flex;
   align-items: flex-start;
-  justify-content: center;
-  width: auto;
+  justify-content: space-between;
+  width: 150px;
   text-align: center;
-  margin: 5px 0;
+  margin: auto;
 }
 
 .slider-container{
   background-color: #8DDAE6;
-  width: 50px;
+  width: 60px;
   height: 25px;
   -webkit-border-radius:25%;
   -moz-border-radius:25%;
@@ -238,7 +238,7 @@ input{
   position: relative;
 }
 
-.slider{
+.am-setting{
   background-color: #ffffff;
   -webkit-border-radius:50%;
   -moz-border-radius:50%;
@@ -247,5 +247,22 @@ input{
   height: 25px;
   position: absolute;
   left: 0;
+  top: 0;
+  -webkit-transition: all .5s;
+  -moz-transition: all .5s;
+  -ms-transition: all .5;
+  -o-transition: all .5s;
+  transition: all .5s;
+}
+
+.pm-setting{
+  background-color: #ffffff;
+  -webkit-border-radius:50%;
+  -moz-border-radius:50%;
+  border-radius:50%;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  left: 33px;
   top: 0;
 }
