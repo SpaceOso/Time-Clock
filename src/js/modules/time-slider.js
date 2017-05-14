@@ -7,24 +7,33 @@ import * as Gradients from "./gradients";
 
 let startSlider = document.getElementById('start-slider');
 let endSlider = document.getElementById('end-slider');
+let clickable = true;
 
 startSlider.addEventListener("click", function () {
-    console.log("start slider has been clicked");
 
+    console.log("clickable", clickable);
+    if(!clickable){
+        return false;
+    }
     let amPm = addClassToSlider(startSlider);
-
-    Gradients.colorChange("start-body", amPm, false);
-
+    Gradients.animateGradient("start-body", amPm, false);
+    clickable = false;
+    setTimeout(makeClickable, 800);
 });
 
 endSlider.addEventListener('click', function () {
 
+    if(!clickable){
+        return false;
+    }
     let amPm = addClassToSlider(endSlider);
-
-    Gradients.colorChange("end-body", amPm, false);
+    Gradients.animateGradient("end-body", amPm, false);
+    clickable = false;
+    setTimeout(makeClickable, 800);
 
 });
 
+//will return either am or pm depending on the current class assigned to the time input
 function addClassToSlider(slider){
 
   if(!slider.classList.contains('pm-setting')) {
@@ -35,4 +44,9 @@ function addClassToSlider(slider){
       return 'am';
   }
 
+}
+
+function makeClickable(){
+    clickable = true;
+    
 }

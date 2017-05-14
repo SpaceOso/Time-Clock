@@ -105,8 +105,8 @@ export function throwError(objectToError, errorTextObj) {
 	if (!elementToError.classList.contains('error')) {
 		elementToError.classList.add('error');
 		errorImgDiv.classList.remove("hidden");
-		
-		Gradients.colorChange(objectToError, false, true);
+		Gradients.addError(objectToError, true);
+		// Gradients.animateGradient(objectToError, false, true);
 		error(errorTextObj);
 	}
 	
@@ -132,7 +132,7 @@ export function error(errorMessage) {
 
 //TODO need to create a function that removes specific errors as inputs get validated
 export function checkAndRemoveError(timeGroup, errorID) {
-	let hadError = false
+	let hadError = false;
 
 	let currentErrors = timeGroup === "start-body" ? startTimeErrors.currentErrors : endTimeErrors.currentErrors;
 	
@@ -145,14 +145,14 @@ export function checkAndRemoveError(timeGroup, errorID) {
 	//check to see if it still has some other errors
     if(currentErrors.length === 0 && hadError === true){
 	    //Since there is no more errors we need to change the input back to it's default colors
-        Gradients.colorChange(timeGroup, null, false);
+	    // Gradients.animateGradient(timeGroup, null, false);
+        Gradients.removeError(timeGroup);
         hideErrorSign(timeGroup);
         let timeGroupDiv = document.getElementById(timeGroup);
         timeGroupDiv.classList.remove('error');
     }
 	
 	
-	// Gradients.colorChange(objectToError, false, false);
 }
 
 function hideErrorSign(timeGroup){

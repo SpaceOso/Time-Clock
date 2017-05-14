@@ -3,8 +3,10 @@
  */
 
 //these are the rgb values from the design file
-const amEndColor = [255, 219, 151];
-const amStartColor = [252, 0, 68];
+// const amEndColor = [255, 219, 151];
+const amEndColor = [252, 0, 68];
+// const amStartColor = [252, 0, 68];
+const amStartColor = [255, 219, 151];
 const pmStartColor = [98, 147, 255];
 const pmEndColor = [170, 77, 177];
 const errorStartColor = [255, 0, 69];
@@ -15,7 +17,6 @@ const standardEndColor = [252, 219, 151];
 
 //only run the color change interval is this is set to false
 let colorIntervalTimer = false;
-
 
 function setColors(colorFormat) {
 	if (colorFormat === "am") {
@@ -45,7 +46,7 @@ function setColors(colorFormat) {
 		}
 	}
 	
-	if(colorFormat === "default"){
+	if (colorFormat === "default") {
 		return {
 			goalColor: pmStartColor,
 			endGoalColor: pmEndColor,
@@ -55,73 +56,123 @@ function setColors(colorFormat) {
 	}
 }
 
-
-
-export function colorChange(timePeriod, AmPm, error) {
-	// console.log("colorChange()", timePeriod, AmPm, error);
+export function removeError(timeInput){
+	console.log("removeError():", timeInput);
+	let colorInfo = {};
 	
 	let goalColor, endGoalColor;
 	let startColor, endColor;
 	
-	let timeBody = document.getElementById(timePeriod);
+	let timeBody = document.getElementById(timeInput);
 	
+	let amOrPm = timeBody.classList.contains("pm") ? "pm" : "am";
+	
+	({goalColor, endGoalColor} = setColors(amOrPm));
+	
+	({startColor, endColor} = setColors("error"));
+	
+	colorInfo.goalColor = goalColor;
+	colorInfo.endGoalColor = endGoalColor;
+	colorInfo.startColor = startColor;
+	colorInfo.endColor = endColor;
+	
+	console.log(JSON.stringify(colorInfo));
+	colorChange(timeInput, colorInfo);
+
+}
+
+export function addError(timeInput) {
+	
+	let colorInfo = {};
+	
+	let goalColor, endGoalColor;
+	let startColor, endColor;
+	
+	let timeBody = document.getElementById(timeInput);
+	
+	({goalColor, endGoalColor} = setColors("error"));
+	colorInfo.goalColor = goalColor;
+	colorInfo.endGoalColor = endGoalColor;
+	
+	/*if we are getting rid of the error,
+	 we need to know what to change into as the error fades away*/
+	//TODO only run this code if it previously had an error
+	// startColor = errorStartColor;
+	// endColor = errorEndColor;
+	if (timeBody.classList.contains("am")) {
+		startColor = amEndColor;
+		endColor = amStartColor;
+	} else if (timeBody.classList.contains("pm")) {
+		startColor = pmStartColor;
+		endColor = pmEndColor;
+	}
+	
+	colorInfo.startColor = startColor;
+	colorInfo.endColor = endColor;
+	
+	colorChange(timeInput, colorInfo);
+	
+}
+
+export function animateGradient(timeInput, amPm) {
+	
+	let goalColor, endGoalColor;
+	let startColor, endColor;
+	
+	let wasThereAnError = false;
+	
+	let timeBody = document.getElementById(timeInput);
+	
+	let colorInfo = {};
+	
+	//we want the opposite since we are going to switch to that
 	if (timeBody.classList.contains("am")) {
 		({startColor, endColor} = setColors("pm"));
 	} else if (timeBody.classList.contains("pm")) {
 		({startColor, endColor} = setColors("am"));
-	} else if(timeBody.classList.contains("error")){
-		({startColor, endColor} = setColors("error"));
-	} else {
-		({startColor, endColor} = setColors("default"));
 	}
 	
-	if (AmPm === "am") {
-		if(timeBody.classList.contains("am")){
-			// enableRadioButtons();
-			return false;
-		}
+	colorInfo.startColor = startColor;
+	colorInfo.endColor = endColor;
+	
+	if (amPm === "am") {
+		// if(timeBody.classList.contains("am")){
+		// 	return false;
+		// }
 		timeBody.classList.remove("pm");
 		timeBody.classList.add("am");
 		({goalColor, endGoalColor} = setColors("am"));
 		// canStartAnimation = false;
 	}
 	
-	if (AmPm === "pm") {
-		if(timeBody.classList.contains("pm")){
-			// enableRadioButtons();
-			return false;
-		}
+	if (amPm === "pm") {
+		// if(timeBody.classList.contains("pm")){
+		// 	return false;
+		// }
 		timeBody.classList.remove("am");
 		timeBody.classList.add("pm");
 		({goalColor, endGoalColor} = setColors("pm"));
 		// canStartAnimation = false;
 	}
 	
+	colorInfo.goalColor = goalColor;
+	colorInfo.endGoalColor = endGoalColor;
 	
-	if (error === true) {
-		console.log("we're throwing an error!");
-		/*if we are adding an error the start colors should be set to the A`m`Pm and change into the error colors*/
-		if (timeBody.classList.contains("am")) {
-			console.log("timebody has am class");
-		} else if (timeBody.classList.contains("pm")) {
-			console.log("timebody has pm class");
-		}
-		
-		({goalColor, endGoalColor} = setColors("error"));
-		
-	} else if (error === false) {
-		/*if we are getting rid of the error,
-		 we need to know what to change into as the error fades away*/
-		startColor = errorStartColor;
-		endColor = errorEndColor;
-		if (timeBody.classList.contains("am")) {
-			goalColor = amEndColor;
-			endGoalColor = amStartColor;
-		} else if (timeBody.classList.contains("pm")) {
-			goalColor = pmStartColor;
-			endGoalColor = pmEndColor;
-		}
-	}
+	colorChange(timeInput, colorInfo);
+	
+}
+
+function colorChange(timeInput, colorInfo) {
+	
+	let goalColor, endGoalColor;
+	let startColor, endColor;
+	
+	let wasThereAnError = false;
+	
+	let timeBody = document.getElementById(timeInput);
+	
+	({startColor, endColor, goalColor, endGoalColor} = colorInfo);
+	
 	
 	function increaseColor() {
 		console.log("increaseColor");
@@ -131,7 +182,7 @@ export function colorChange(timePeriod, AmPm, error) {
 		//these will hold the rgb(#,#,#) value
 		let startColorString = "";
 		let endColorString = "";
-
+		
 		startColor = startColor.map((x, i) => {
 			
 			if (x < goalColor[i]) {
@@ -175,8 +226,6 @@ export function colorChange(timePeriod, AmPm, error) {
 		if (startFinished && endFinished) {
 			clearInterval(colorIntervalTimer);
 			colorIntervalTimer = false;
-			
-			// enableRadioButtons();
 		}
 	}
 	

@@ -115,7 +115,7 @@ input{
 }
 
 .time-flex{
-  //display: flex;
+  display: flex;
   align-items: center;
   width: 100%;
   height: 100%;
@@ -123,22 +123,22 @@ input{
 
 
 .time-input{
-  width: 307px;
+  width: 200px;
   //height: 140px;
   border: 3px solid $mainFont;
   display: inline-block;
   -webkit-border-radius: 13px;
   -moz-border-radius: 13px;
   border-radius: 13px;
-  margin: 50px 20px;
+  //margin: 50px 20px;
   text-align: center;
   padding-top: 5px;
 
   /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fc0044+0,ffdb97+100 */
-  background: #64fc5c; /* Old browsers */
-  background: -moz-linear-gradient(top, #64fc5c -150%, #ffdb97 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #64fc5c -150%,#ffdb97 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #64fc5c -150%,#ffdb97 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  background: #FC0044; /* Old browsers */
+  background: -moz-linear-gradient(top, #FC0044 0%, #FFDB97 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, #FC0044 0%,#FFDB97 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, #FC0044 0%,#FFDB97 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fc0044', endColorstr='#ffdb97',GradientType=0 ); /* IE6-9 */
 
   .time-set{
@@ -168,33 +168,6 @@ input{
 
 }
 
-.standard-time{
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fc0044+0,ffdb97+100 */
-  background: #64fc5c; /* Old browsers */
-  background: -moz-linear-gradient(top, #64fc5c -150%, #ffdb97 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, #64fc5c -150%,#ffdb97 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, #64fc5c -150%,#ffdb97 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fc0044', endColorstr='#ffdb97',GradientType=0 ); /* IE6-9 */
-}
-
-
-.am-time{
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#fc0044+0,ffdb97+100 */
-  background: $amStart; /* Old browsers */
-  background: -moz-linear-gradient(top, $amEnd -150%, $amStart 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, $amEnd -150%,$amStart 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, $amEnd -150%,$amStart 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fc0044', endColorstr='#ffdb97',GradientType=0 ); /* IE6-9 */
-}
-
-.pm-time{
-  /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#aa4db1+0,6293ff+100 */
-  background: $pmEnd; /* Old browsers */
-  background: -moz-linear-gradient(top, $pmEnd 0%, $pmStart 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, $pmEnd 0%,$pmStart 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, $pmEnd 0%,$pmStart 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#aa4db1', endColorstr='#6293ff',GradientType=0 ); /* IE6-9 */
-}
 
 #content-container{
   max-width: 700px;
@@ -204,7 +177,7 @@ input{
 
 .icon-error{
   width: 53px;
-  align-self: flex-start;
+  position: absolute;
 }
 
 .slider{
@@ -224,7 +197,7 @@ input{
   justify-content: space-between;
   width: 150px;
   text-align: center;
-  margin: auto;
+  margin: 10px auto;
 }
 
 .slider-container{

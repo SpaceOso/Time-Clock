@@ -2,11 +2,11 @@ const {resolve} = require('path');
 
 module.exports = env => ({
     context: resolve('src'),
-    entry: "./js/app.js",
+    entry: "./index.js",
     output: {
-        path: resolve('dist'),
+        path: resolve('public'),
         filename: "bundle.js",
-        publicPath: 'dist/',
+        publicPath: 'public/',
         pathinfo: !env.prod,
     },
     devtool: env.prod ?  "source-map" : 'eval',
