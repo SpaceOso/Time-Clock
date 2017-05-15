@@ -25,60 +25,30 @@ const endTimeZones = document.getElementsByName('end-time-frame');
 
 //TODO need to create a blur event listener so we can know if we can show the submit times button
 //this was changed from blur to keyup, I think it works better this way
-startTimeInput.addEventListener("keyup", function (event) {
+// startTimeInput.addEventListener("keyup", function (event) {
+//
+// 	console.log(event.code);
+//
+// 	if(event.target.value.length !== 0){
+//         event.target.value = validateTimeInput(event.target.value, startGroup);
+// 	}
+//
+//
+// });
+//
+// endTimeInput.addEventListener("keyup", function (event) {
+//
+// 	if(event.target.value.length !== 0){
+//         event.target.value = validateTimeInput(event.target.value, endGroup);
+//     }
+//
+// });
 
-	console.log(event.code);
-
-	if(event.target.value.length !== 0){
-        event.target.value = validateTimeInput(event.target.value, startGroup);
-	}
-
-	
-});
-
-endTimeInput.addEventListener("keyup", function (event) {
-
-	if(event.target.value.length !== 0){
-        event.target.value = validateTimeInput(event.target.value, endGroup);
-    }
-
-});
-
-function removeWhiteSpace(timeValue){
+export function removeWhiteSpace(timeValue){
 	return timeValue.replace(/\s:*/g, '');
 }
 
-//this gets called on keyup for the time inputs
-function validateTimeInput(eventValue, timeGroup){
-	let updatedValue = "";
-	
-	
-	//get rid of any empty space
-	eventValue = removeWhiteSpace(eventValue);
-	
-	if(checkForNumber(eventValue) === null){
-		Message.throwError(timeGroup, Message.errorText.notANumber);
-	} else {
-		//did not add the error, but we need to check if it had it from a previous check
-		Message.checkAndRemoveError(timeGroup, Message.errorText.notANumber.errorID);
-	}
-	
-	if(eventValue.length >= 2){
-		updatedValue = setHour(eventValue);
-		if(updatedValue.length > 0){
-			eventValue = updatedValue;
-		}
-		
-		removeWhiteSpace(eventValue);
-	}
-	
-	if(eventValue.length >= 3){
-		console.log("time value length is greater than 3", eventValue);
-		eventValue = formatTimeInput(eventValue, timeGroup);
-	}
-	
-	return eventValue;
-}
+
 
 function formatTimeInput(timeStr, timeGroup) {
 	console.log("formatTimeInput:", timeStr, "timeGroup:", timeGroup);
@@ -110,18 +80,10 @@ export function getTimes(timeGroup){
 	}
 }
 
-function setHour(value){
-	let modifiedValue = "";
-	value = value.substr(0, 2);
-	if(checkForNumber(value) !== null){
-		//now we know the value is a number
-		if(+value > 12){
-			return modifiedValue = `0${value}`;
-			
-		}
-	}
+export function checkForNumber(numberToCheck) {
+	let reg = /^\d+$/;
 	
-	return modifiedValue;
+	return numberToCheck.match(reg);
 }
 
 //TODO this needs to be redone we no longer use the radio buttons
@@ -176,11 +138,7 @@ function checkTimeLimits(timeGroup) {
 	return timeLimitsValidated;
 }
 
-function checkForNumber(numberToCheck) {
-	let reg = /^\d+$/;
-	
-	return numberToCheck.match(reg);
-}
+
 
 //checks that the hours and minutes are valid numbers
 function validateTimePeriods(timeGroup) {
