@@ -19,7 +19,8 @@ class App extends React.Component {
 			<div>
 				<Title/>
 				<TaskNameInput/>
-				<TimeInputContainer/>
+				<TimeInputContainer startFrame="Start Time" prefix="start" id="start-body" timeGroup="start"/>
+				<TimeInputContainer startFrame="End Time" prefix="end" id="end-body" timeGroup="end"/>
 				<h2> Hello! </h2>
 			</div>
 		)

@@ -50,27 +50,7 @@ export function removeWhiteSpace(timeValue){
 
 
 
-function formatTimeInput(timeStr, timeGroup) {
-	console.log("formatTimeInput:", timeStr, "timeGroup:", timeGroup);
-	let hour = timeStr.substr(0, 2);
-	let minutes = timeStr.substr(2);
-	console.log("hour:", hour, "minutes", minutes);
-	
-	if(hour === "00"){
-		console.log("hour cannot be 00");
-		Message.throwError(timeGroup, Message.errorText.hourInvalid);
-	}
-	
-	if(timeGroup === "start-body"){
-		startTimeValues = {hour: hour, minutes: minutes};
-	}
-	
-	if(timeGroup === "end-body"){
-		endTimeValues = {hour: hour, minutes: minutes};
-	}
-	
-	return `${hour} : ${minutes}`;
-}
+
 
 export function getTimes(timeGroup){
 	if(timeGroup === "start"){
