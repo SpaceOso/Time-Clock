@@ -23,26 +23,6 @@ const startTimeZones = document.getElementsByName('start-time-frame');
 const endTimeZones = document.getElementsByName('end-time-frame');
 
 
-//TODO need to create a blur event listener so we can know if we can show the submit times button
-//this was changed from blur to keyup, I think it works better this way
-// startTimeInput.addEventListener("keyup", function (event) {
-//
-// 	console.log(event.code);
-//
-// 	if(event.target.value.length !== 0){
-//         event.target.value = validateTimeInput(event.target.value, startGroup);
-// 	}
-//
-//
-// });
-//
-// endTimeInput.addEventListener("keyup", function (event) {
-//
-// 	if(event.target.value.length !== 0){
-//         event.target.value = validateTimeInput(event.target.value, endGroup);
-//     }
-//
-// });
 
 export function removeWhiteSpace(timeValue){
 	return timeValue.replace(/\s:*/g, '');
