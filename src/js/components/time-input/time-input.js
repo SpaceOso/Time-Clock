@@ -5,13 +5,21 @@ import {removeWhiteSpace, checkForNumber} from '../../modules/time-fields';
 
 
 class TimeInput extends React.Component {
+
 	constructor(props) {
 		super(props);
-		this.state = {timeInput: ''};
+		this.state = {
+		    timeInput: ''
+        };
 		this.validateTimeInput = this.validateTimeInput.bind(this);
 		console.log("a time group has been created with a time group of:", this.props.timeGroup);
 		// this.timeGroup = this.props.timeGroup;
 	}
+
+    //TODO need to figure out if this is the best way to throw an error, we're talking to the grand parent then to the error component
+	throwError(timeGroup, error){
+	    this.props.throwError(timeGroup, error);
+    }
 	
 	formatTimeInput(timeStr) {
 		console.log("formatTimeInput:", timeStr);
@@ -23,17 +31,21 @@ class TimeInput extends React.Component {
 		if (hour === "00") {
 			console.log("hour cannot be 00");
 			//TODO throw error
+            this.throwError('amPM', "testing error message");
 			// Message.throwError(timeGroup, Message.errorText.hourInvalid);
 		}
 		
 		//TODO figure out how to get either the end or start
-		// if (timeGroup === "start-body") {
-		//     startTimeValues = {hour: hour, minutes: minutes};
-		// }
-		//
-		// if (timeGroup === "end-body") {
-		//     endTimeValues = {hour: hour, minutes: minutes};
-		// }
+		if (this.props.timeGroup === "start-body") {
+		    //TODO figure out how to set global state so the app can read both start and end times
+		    // startTimeValues = {hour: hour, minutes: minutes};
+            console.log('This input is the start frame');
+		}
+
+        if (this.props.timeGroup === "end-body") {
+            // endTimeValues = {hour: hour, minutes: minutes};
+            console.log('This input is the end frame');
+        }
 		
 		return `${hour} : ${minutes}`;
 	}
@@ -48,14 +60,12 @@ class TimeInput extends React.Component {
 			//now we know the value is a number
 			if (+value > 12) {
 				return modifiedValue = `0${value}`;
-				
 			}
 		}
 		
 		return modifiedValue;
 	}
 	
-	//this gets called on keyup for the time inputs
 	validateTimeInput(eventValue) {
 		let updatedValue = "";
 		
@@ -83,15 +93,14 @@ class TimeInput extends React.Component {
 		if (eventValue.length >= 3) {
 			console.log("time value length is greater than 3", eventValue);
 			eventValue = this.formatTimeInput(eventValue);
+			this.props.testCall();
 		}
 		
 		return eventValue;
 	}
 	
 	handleChange(event) {
-		console.log("things are getting changed");
-		console.log(event.target.value);
-		
+
 		//TODO: Do we need to clear white space before checking?
 		if (event.target.value.length !== 0) {
 			event.target.value = this.validateTimeInput(event.target.value);
