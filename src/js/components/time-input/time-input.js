@@ -28,6 +28,10 @@ class TimeInput extends React.Component {
     }
 
     // =========================================
+    checkAndRemoveError(){
+        // this.props.checkAndRemoveError();
+    }
+    // =========================================
     formatTimeInput(timeStr) {
         console.log("formatTimeInput:", timeStr);
 
@@ -35,10 +39,11 @@ class TimeInput extends React.Component {
         let minutes = timeStr.substr(2);
         console.log("hour:", hour, "minutes", minutes);
 
+        
         if (hour === "00") {
             console.log("hour cannot be 00");
             //TODO throw error
-            this.throwError('amPM', "testing error message");
+            this.throwError(this.props.timeGroup, "testing error message");
             // Message.throwError(timeGroup, Message.errorText.hourInvalid);
         }
 
@@ -82,11 +87,13 @@ class TimeInput extends React.Component {
 
         if (checkForNumber(eventValue) === null) {
             //TODO throw error
-            // Message.throwError(timeGroup, Message.errorText.notANumber);
+            console.log("checkForNumber === null");
+            this.throwError(this.props.timeGroup, 'notANumber');
         } else {
             //did not add the error, but we need to check if it had it from a previous check
             //TODO remove error
-            // Message.checkAndRemoveError(timeGroup, Message.errorText.notANumber.errorID);
+            console.log("checkForNumber != null");
+            this.checkAndRemoveError(this.props.timeGroup, 'notANumber');
         }
 
         if (eventValue.length >= 2) {

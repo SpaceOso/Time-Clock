@@ -28,12 +28,15 @@ class App extends React.Component {
 	}
 	
 	render() {
-		const testErrors = ['error', 'another Error', 'something went wrong', 'check your damn digits foo'];
-
+		
+		const testErrors = [];
+		
 		return (
 			<div id="content-container">
 				<Title/>
 				<TaskNameInput/>
+				{/*need to create a parent for the timeInputContainers to communicate with, that parent will then communicate
+				with index.js and if there are errors send them to the errorcontainer*/}
 				<TimeInputContainer startFrame="Start Time" prefix="start" id="start-body" timeGroup="start-body"/>
 				<TimeInputContainer startFrame="End Time" prefix="end" id="end-body" timeGroup="end-body"/>
 				<ErrorContainer messages={testErrors}/>
