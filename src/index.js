@@ -5,6 +5,7 @@ import ReactDOM from 'react-dom';
 import Title from './js/components/title';
 import TimeInputContainer from './js/components/time-input/time-input-container';
 import TaskNameInput from './js/components/task-name-input';
+import ErrorContainer from './js/components/error/error-container';
 
 import "./styles/styles.scss";
 
@@ -12,16 +13,30 @@ import "./styles/styles.scss";
 class App extends React.Component {
 	constructor() {
 		super();
+		this.state = {
+			startTime: {
+				hour: "",
+				minutes: "",
+				error: []
+			},
+            endTime: {
+                hour: "",
+                minutes: "",
+                error: []
+            }
+		}
 	}
 	
 	render() {
+		const testErrors = ['error', 'another Error', 'something went wrong', 'check your damn digits foo'];
+
 		return (
-			<div>
+			<div id="content-container">
 				<Title/>
 				<TaskNameInput/>
 				<TimeInputContainer startFrame="Start Time" prefix="start" id="start-body" timeGroup="start-body"/>
 				<TimeInputContainer startFrame="End Time" prefix="end" id="end-body" timeGroup="end-body"/>
-				<h2> Hello! </h2>
+				<ErrorContainer messages={testErrors}/>
 			</div>
 		)
 		

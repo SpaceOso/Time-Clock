@@ -29,9 +29,6 @@ export function removeWhiteSpace(timeValue){
 }
 
 
-
-
-
 export function getTimes(timeGroup){
 	if(timeGroup === "start"){
 		return startTimeValues

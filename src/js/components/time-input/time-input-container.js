@@ -5,16 +5,39 @@ import TimeInputError from './time-input-error';
 
 class TimeInputContainer extends React.Component{
 
+    constructor(props){
+        super(props);
+        this.state={
+            error: false,
+        };
+
+        this.throwError = this.throwError.bind(this);
+        this.removeError = this.throwError.bind(this);
+    }
+
+
     testCallBack(){
         console.log("you are now ready!!");
     }
 
     throwError(timeGroup, error){
-        console.log("Error thrown");
         console.log("Error:", timeGroup, error);
+        console.log("Error thrown");
+        this.setState({error: true});
+
+    }
+
+    removeError(){
+        this.setState({error: false});
     }
 
     render(){
+        let error = "";
+
+        if(this.state.error){
+            error = <TimeInputError/>
+        }
+
         return (
             <div className="time-input am" id={this.props.id}>
 
@@ -27,11 +50,14 @@ class TimeInputContainer extends React.Component{
                             id={this.props.id}
                             timeGroup={this.props.timeGroup}
                             throwError={this.throwError}
-                            testCall={this.testCallBack}/>
+                            removeError={this.removeError}
+                            testCall={this.testCallBack}
+                        />
 
                     </div>
+
                     {/*TODO this might be a place to create and insert an error component*/}
-                    <TimeInputError/>
+                    {error}
 
                 </div>
 
