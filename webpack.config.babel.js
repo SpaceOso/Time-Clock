@@ -2,7 +2,7 @@ const {resolve} = require('path');
 
 module.exports = env => ({
     context: resolve('src'),
-    entry: "./index.js",
+    entry: "./time-clock.js",
     output: {
         path: resolve('public'),
         filename: "bundle.js",
