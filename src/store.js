@@ -14,22 +14,22 @@ const defaultState = {
         errors: [],
         timePeriod: ''
     },
-    // endTime: {
-    //     hour: '',
-    //     minutes: '',
-    //     errors: [],
-    //     timePeriod: ''
-    // },
-    // tasks: [
-    //     {
-    //         name: 'test time',
-    //         startTime: '02:00',
-    //         endTime: '04:00',
-    //         totalTime: '2:00',
-    //         id: 'testTime'
-    //     }
-    // ],
-    // totalTime: '2:00'
+    endTimes: {
+        hour: '',
+        minutes: '',
+        errors: [],
+        timePeriod: ''
+    },
+    tasks: [
+        {
+            name: '',
+            startTime: '',
+            endTime: '',
+            totalTime: '',
+            id: ''
+        }
+    ],
+    totalTime: ''
 };
 
 const store = createStore(rootReducer, defaultState);

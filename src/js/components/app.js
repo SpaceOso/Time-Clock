@@ -6,7 +6,11 @@ import Main from './main';
 
 function mapStateToProps(state){
 	return {
-		startTimes: state.startTimes
+		startTimes: state.startTimes,
+		currentTaskName: state.currentTaskName,
+		endTimes: state.endTimes,
+		tasks: state.tasks,
+		totalTime: state.totalTime
 	}
 
 }
