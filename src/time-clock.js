@@ -17,9 +17,7 @@ class TimeClock extends React.Component {
 		
 		return (
 			<Provider store={store}>
-				<div id="content-container">
-					<App />
-				</div>
+				<App />
 			</Provider>
 		)
 		
