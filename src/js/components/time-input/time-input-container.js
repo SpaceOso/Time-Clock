@@ -1,6 +1,6 @@
 import React from 'react';
 
-import TimeInput from './time-input';
+import TimeInput from './time-input-old';
 import TimeInputError from './time-input-error';
 
 class TimeInputContainer extends React.Component {

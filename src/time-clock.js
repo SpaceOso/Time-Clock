@@ -14,7 +14,6 @@ class TimeClock extends React.Component {
 	}
 	
 	render() {
-		
 		return (
 			<Provider store={store}>
 				<App />
@@ -25,7 +24,6 @@ class TimeClock extends React.Component {
 	
 }
 
-// export default TimeClock;
 
 ReactDOM.render(<TimeClock />, document.getElementById('root'));
 
