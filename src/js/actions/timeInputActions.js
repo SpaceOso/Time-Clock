@@ -1,8 +1,9 @@
 //save the start time
 export function saveStartTime(time) {
+    console.log('inside the action: ', time);
     return {
         type: 'SAVE_START_TIME',
-        time
+        payload: time
     }
 }
 
@@ -10,7 +11,7 @@ export function saveStartTime(time) {
 export function saveEndTime(time){
     return{
         type: 'SAVE_END_TIME',
-        time
+        payload: time
     }
 }
 

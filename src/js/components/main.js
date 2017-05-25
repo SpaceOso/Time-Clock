@@ -1,35 +1,25 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import {bindActionCreators} from 'redux';
+import {connect} from 'react-redux';
+import * as actionCreators from '../actions/action-creator';
 
 //React components
 import Title from './title';
-// import TimeInputContainer from './time-input/time-input-container';
-import TaskNameInput from './task-name-input';
-import ErrorContainer from './error/error-container';
+import TaskName from '../containers/taskNameContainer';
+import ErrorContainer from '../containers/errorContainer';
 import TimeInputContainer from '../containers/timeInputContainer';
 
 class Main extends React.Component {
-	constructor() {
-		super();
-	}
 	
 	render() {
-		
-		const testErrors = [];
-		
 		return (
 			<div id="content-container">
+				
+				<h1>{this.props.currentTaskName}</h1>
 				<Title/>
-				<TaskNameInput/>
-				{/*need to create a parent for the timeInputContainers to communicate with, that parent will then communicate
-				 with index.js and if there are errors send them to the errorcontainer*/}
-				 {/*this is where we are going to need a container for the time inputs..the container will be the parent
-				 	of both of the time inputs
-				 */}
-				 <TimeInputContainer />
-				{/*<TimeInputContainer startFrame="Start Time" prefix="start" id="start-body" timeGroup="start-body"/>*/}
-				{/*<TimeInputContainer startFrame="End Time" prefix="end" id="end-body" timeGroup="end-body"/>*/}
-				<ErrorContainer messages={testErrors}/>
+				<TaskName/>
+				<TimeInputContainer />
+				{this.props.currentErrors.length > 0 ? <ErrorContainer/> : null}
 			</div>
 		)
 		
@@ -37,7 +27,23 @@ class Main extends React.Component {
 	
 }
 
-export default Main;
+//this will set the state to props
+function mapStateToProps(state) {
+	return {
+		startTimes: state.startTimes,
+		currentTaskName: state.currentTaskName,
+		endTimes: state.endTimes,
+		tasks: state.tasks,
+		totalTime: state.totalTime,
+		currentErrors: state.currentErrors
+	}
+	
+}
 
-// ReactDOM.render(<Main />, document.getElementById('root'));
+//this well set the reducers to props
+function mapDispatchToProps(dispatch) {
+	return bindActionCreators(actionCreators, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
 

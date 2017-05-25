@@ -1,41 +1,78 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import TimeInput from '../components/timeInput';
+import {bindActionCreators, combineReducers} from 'redux';
+import TimeFrame from '../components/timeFrame';
 
 //actions
-import * as timeInputActions from '../actions/timeInputActions';
+import * as startTimeActions from '../actions/timeInputActions';
+import * as errorActions from '../actions/errorActions'
 
-class TimeInputContainer extends React.Component{
-    render(){
-        return (
-            <div>
-                <h1>I'm a time input container</h1>
-                <TimeInput />
-            </div>
-        )
-    }
+class TimeInputContainer extends React.Component {
+	constructor(props){
+		super(props);
+		this.timesValidated = false;
+		this.startTimeValidated = false;
+		this.endTimeValidated = false;
+	}
+	
+	handleTimeChange(time) {
+		this.props.saveStartTime(time);
+	}
+	
+	handleEndTime(time){
+		this.props.saveEndTime(time);
+	}
+	
+	validateStartTime(){
+		this.startTimeValidated = true;
+	}
+	
+	validateEndTime(){
+		this.endTimeValidated = true;
+	}
+	
+	createSubmitButton(){
+		return(<button>Submit Times</button>)
+	}
+	
+	render() {
+		
+		return (
+			<div>
+				<TimeFrame
+					timeProperties={this.props.startTimes}
+					startFrame="Start Time"
+					id="start-body"
+					
+					handleChange={this.handleTimeChange.bind(this)}
+				/>
+				
+				<TimeFrame
+					timeProperties={this.props.endTimes}
+					startFrame="End Time"
+					id="end-body"
+					handleChange={this.handleEndTime.bind(this)}
+				/>
+				{/*create submit button once both time frames confirm*/}
+				{this.timesValidated === true ? this.createSubmitButton() : ""}
+			</div>
+		)
+	}
 }
 
-// export default TimeInputContainer;
-
-
-
-
 //this will set the state to props
-function mapStateToProps(state){
-    return {
-        startTimes: state.startTimes,
-        endTimes: state.endTimes,
-        totalTime: state.totalTime
-    }
+function mapStateToProps(state) {
+	return {
+		startTimes: state.startTimes,
+		endTimes: state.endTimes,
+		totalTime: state.totalTime,
+		currentErrors: state.currentErrors
+	}
 }
 
 //this well set the reducers to props
-function mapDispatchToProps(dispatch){
-    return bindActionCreators(timeInputActions, dispatch);
+function mapDispatchToProps(dispatch) {
+	return bindActionCreators({...errorActions, ...startTimeActions}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(TimeInputContainer);
-
-// export default TimeInputContainer;

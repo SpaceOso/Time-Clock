@@ -1,7 +1,7 @@
 import React from 'react';
 
 import TimeInput from './time-input-old';
-import TimeInputError from './time-input-error';
+import TimeInputError from './timeFrameError';
 
 class TimeInputContainer extends React.Component {
 	
@@ -74,7 +74,6 @@ class TimeInputContainer extends React.Component {
 					
 					</div>
 					
-					{/*TODO this might be a place to create and insert an error component*/}
 					{error}
 				
 				</div>

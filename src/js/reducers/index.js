@@ -6,7 +6,16 @@ import currentTaskName from './currentTaskName-reducer';
 import endTimes from './endTimes-reducer';
 import tasks from './tasks-reducer';
 import totalTime from './totalTime-reducer';
+import currentErrors from './currentErrorReducer';
 
-const rootReducer = combineReducers({startTimes, currentTaskName, endTimes, tasks, totalTime});
+
+const rootReducer = combineReducers({
+	startTimes,
+	currentTaskName,
+	endTimes,
+	tasks,
+	totalTime,
+	currentErrors
+});
 
 export default rootReducer;

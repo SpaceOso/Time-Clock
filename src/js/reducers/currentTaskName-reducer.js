@@ -1,6 +1,11 @@
-function currentTaskName(state=[], action) {
-	console.log(state, action)
-	return state;
+function currentTaskName(state=null, action) {
+	
+	switch(action.type){
+		case 'SAVE_TASKNAME' :
+			return action.payload;
+		default:
+			return state
+	}
 }
 
 export default currentTaskName;

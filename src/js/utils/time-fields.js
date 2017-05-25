@@ -1,10 +1,10 @@
 /**
  * Created by Rico on 3/16/2017.
  */
-import * as Message from "./messages";
-import * as TimeMath from "./time-clock-math";
-import * as TaskService from "./task-service";
-import * as Gradients from "./gradients";
+// import * as Message from "./messages";
+// import * as TimeMath from "./time-clock-math";
+// import * as TaskService from "./task-service";
+// import * as Gradients from "./gradients";
 
 
 //input groups
@@ -29,15 +29,16 @@ export function removeWhiteSpace(timeValue){
 }
 
 
-export function getTimes(timeGroup){
-	if(timeGroup === "start"){
-		return startTimeValues
-	} else if( timeGroup === "end"){
-		return endTimeValues;
-	}
-}
+// export function getTimes(timeGroup){
+// 	if(timeGroup === "start"){
+// 		return startTimeValues
+// 	} else if( timeGroup === "end"){
+// 		return endTimeValues;
+// 	}
+// }
 
 export function checkForNumber(numberToCheck) {
+	console.log("inside checkForNumber: ", numberToCheck);
 	let reg = /^\d+$/;
 	
 	return numberToCheck.match(reg);
@@ -45,7 +46,7 @@ export function checkForNumber(numberToCheck) {
 
 //TODO this needs to be redone we no longer use the radio buttons
 export function getAmOrPM() {
-	
+/*
 	let startPM = false;
 	let endPM = false;
 	
@@ -69,12 +70,12 @@ export function getAmOrPM() {
 	return {
 		startPM: startPM,
 		endPM: endPM
-	};
+	};*/
 }
 
 //checks that the hour and minutes is set correctly
 function checkTimeLimits(timeGroup) {
-	
+/*
 	const {hour, minutes} = timeGroup;
 	
 	let timeLimitsValidated = true;
@@ -92,14 +93,14 @@ function checkTimeLimits(timeGroup) {
 		timeLimitsValidated = false;
 	}
 	
-	return timeLimitsValidated;
+	return timeLimitsValidated;*/
 }
 
 
 
 //checks that the hours and minutes are valid numbers
 function validateTimePeriods(timeGroup) {
-	console.log("validateTimePeriods");
+/*	console.log("validateTimePeriods");
 	
 	const {hour, minutes, id} = timeGroup;
 	
@@ -129,12 +130,12 @@ function validateTimePeriods(timeGroup) {
 		}
 	}
 	
-	return numbersValidated;
+	return numbersValidated;*/
 }
 
 //checks that both values entered are numbers
 export function checkInputGroups(currentTask) {
-	console.log("checkInputGroups");
+/*	console.log("checkInputGroups");
 	
 	const {startTimes, endTimes} = currentTask;
 	
@@ -171,7 +172,7 @@ export function checkInputGroups(currentTask) {
 		return true;
 	} else {
 		return false;
-	}
+	}*/
 	
 }
 
