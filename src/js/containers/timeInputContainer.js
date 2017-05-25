@@ -35,6 +35,10 @@ class TimeInputContainer extends React.Component {
 		return(<button>Submit Times</button>)
 	}
 	
+	saveError(error){
+		this.props.addError(error);
+	}
+	
 	render() {
 		
 		return (
@@ -43,7 +47,7 @@ class TimeInputContainer extends React.Component {
 					timeProperties={this.props.startTimes}
 					startFrame="Start Time"
 					id="start-body"
-					
+					saveError={this.saveError.bind(this)}
 					handleChange={this.handleTimeChange.bind(this)}
 				/>
 				

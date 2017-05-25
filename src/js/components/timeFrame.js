@@ -11,13 +11,14 @@ export class TimeFrameComponent extends React.Component{
 	}
 	
 	throwError(message = "no message"){
-		console.log(message);
-		console.log('in parent, we threw the error ))))))))', message.message);
+		// console.log(message);
+		// console.log('in parent, we threw the error ))))))))', message.message);
 		this.showError = true;
+		this.props.saveError(message);
 	}
 	
 	removeError(){
-		console.log("removing the error");
+		// console.log("removing the error");
 		this.showError = false;
 	}
 	

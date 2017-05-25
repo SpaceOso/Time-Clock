@@ -1,8 +1,13 @@
-function currentErrors(state=[], action){
-	switch(action.type){
+function currentErrors(state = [], action) {
+	switch (action.type) {
 		case "ADD_ERROR":
-			console.log("we are adding a new error to this!!");
-			return state;
+			
+			return [...state,
+				{
+					errorId: action.errorMessage.errorID,
+					message: action.errorMessage.message
+				}
+			];
 		default:
 			return state;
 	}
